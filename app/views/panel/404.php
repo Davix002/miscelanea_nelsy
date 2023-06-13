@@ -1,0 +1,1 @@
+<h1 class='d-flex align-items-center justify-content-center flex-column vh-100 display-1 fw-bold'>404</h1>
