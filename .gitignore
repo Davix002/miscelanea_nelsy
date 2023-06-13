@@ -1,6 +1,2 @@
 desktop.ini
 **/desktop.ini
-.htaccess
-config/conexion.php
-dompdf/
-dompdf/**

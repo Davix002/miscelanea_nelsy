@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^$ /miscelanea_nelsy/public/index.php?Pages=inicio [L]
+RewriteRule ^([a-zA-Z0-9-/]+)$ public/index.php?Pages=$1 [L]
