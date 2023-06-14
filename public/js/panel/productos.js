@@ -76,24 +76,48 @@ function fn_modal_producto(action = "CREATE", id) {
   modal.show();
 }
 
+function enableEditing(id) {
+  // Obtén todas las celdas de la fila por el id del producto
+  const row = document.querySelector(`#productRow_${id}`);
+  const inputs = row.querySelectorAll('.editable');
+
+  // Quita el atributo readonly para los inputs y disabled para los select
+  inputs.forEach(input => {
+    if (input.tagName === "SELECT") {
+      input.removeAttribute('disabled');
+    } else {
+      input.removeAttribute('readonly');
+    }
+  });
+
+  // Muestra el botón de guardar y esconde el de editar
+  const editBtn = row.querySelector('.editBtn');
+  const saveBtn = row.querySelector('.saveBtn');
+  editBtn.classList.add('d-none');
+  saveBtn.classList.remove('d-none');
+}
+
 function fnCreateUpdate(action = "CREATE", id = "") {
-  let url = "";
+   let url = "";
   if (action === "CREATE") {
     url = "app/controllers/producto_controller.php?action=store";
   } else {
     url = "app/controllers/producto_controller.php?action=update";
   }
-  const form_modal_producto = document.querySelector("#form-modal-producto");
 
-  const Form_data = new FormData(form_modal_producto);
+  var formElement = document.getElementById('form_' + id); // idProducto es el id del producto que deseas enviar
+  var formData = new FormData(formElement);
 
+  
+  // Añade el id si es una actualización
   if (action === "UPDATE") {
-    Form_data.append("id", id);
+    formData.append("id", id);
   }
 
+    // Aquí va el código de fetch para enviar los datos al servidor
   fetch(`${url}`, {
     method: "POST",
-    body: Form_data,
+    body: formData,
   })
     .then((response) => {
       if (response.ok) {
@@ -105,15 +129,15 @@ function fnCreateUpdate(action = "CREATE", id = "") {
         response.json().then((data) => {
           const errors = data.data.error;
 
-          const inputs = form_modal_producto.querySelectorAll("input");
+          const inputs = formElement.querySelectorAll("input");
 
-          const selects = form_modal_producto.querySelectorAll("select");
+          const selects = formElement.querySelectorAll("select");
     
           // Remove previous error messages
           removeErrorMessages(inputs);
           removeErrorMessages(selects);
           // Add new error messages
-          addErrorMessages(form_modal_producto, errors);
+          addErrorMessages(formElement, errors);
         });
       }
     })
