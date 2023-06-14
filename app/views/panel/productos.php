@@ -109,9 +109,9 @@
             echo "<td></td>";
             echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable'></td>";
             echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable'></td>";
-            echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda'></td>";
-            echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda'></td>";
-            echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda'></td>";
+            echo "<td><input type='number' name='precio_compra' id='precio_compra_nueva_fila' class='form-control editable moneda'></td>";
+            echo "<td><input type='number' name='precio_venta' id='precio_venta_nueva_fila' class='form-control editable moneda'></td>";
+            echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo_nueva_fila' class='form-control editable moneda'></td>";
             echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable'></td>";
             echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable'></td>";
 

@@ -159,8 +159,6 @@ function addErrorMessages(form, errors) {
   }
 }
 
-
-
 function fnDelete(id) {
   if (confirm("¿Está seguro de desea eliminar el registro?")) {
     const Form_data = new FormData();
@@ -215,7 +213,7 @@ function filterProducts() {
   }
 }
 
-let precio_compra = document.getElementById("precio_compra");
+let precio_compra = document.getElementById("precio_compra_nueva_fila");
 precio_compra.addEventListener("input", calcular_precio);
 
 function roundToMultipleOf100(value) {
@@ -223,19 +221,19 @@ function roundToMultipleOf100(value) {
 }
 
 function calcular_precio() {
-  let precio_compra_value = document.getElementById("precio_compra").value;
+  let precio_compra_value = document.getElementById("precio_compra_nueva_fila").value;
 
   if (precio_compra_value <= 0 || precio_compra_value == "") {
-    document.getElementById("precio_venta").value = "";
-    document.getElementById("precio_mayoreo").value = "";
+    document.getElementById("precio_venta_nueva_fila").value = "";
+    document.getElementById("precio_mayoreo_nueva_fila").value = "";
   } else {
     let precio_venta = precio_compra_value * 1.25;
     precio_venta = roundToMultipleOf100(precio_venta) + 100;
-    document.getElementById("precio_venta").value = precio_venta;
+    document.getElementById("precio_venta_nueva_fila").value = precio_venta;
 
-    let precio_mayoreo = document.getElementById("precio_venta").value * 0.9;
+    let precio_mayoreo = document.getElementById("precio_venta_nueva_fila").value * 0.9;
     precio_mayoreo = roundToMultipleOf100(precio_mayoreo);
-    document.getElementById("precio_mayoreo").value = precio_mayoreo;
+    document.getElementById("precio_mayoreo_nueva_fila").value = precio_mayoreo;
   }
 }
 
