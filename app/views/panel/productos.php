@@ -1,7 +1,7 @@
 <div class="row">
     <!-- Button trigger modal -->
 
-    <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="fn_modal_producto('CREATE')">
+    <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="fnCreateRow()">
         Nuevo producto
     </button>
 
@@ -48,28 +48,19 @@
             for ($i = 0; $i < count($productos); $i++) {
 
                 echo "<form id='form_" . $productos[$i]['id'] . "' method='post'>";
-
                 echo "<tr id='productRow_" . $productos[$i]['id'] . "'>";
-
                 echo "<td>" . $productos[$i]['id'] . "</td>";
-
                 echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable' value='" . $productos[$i]['nombre_producto'] . "' readonly></td>";
-
                 echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
-
                 echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda' value='" . $productos[$i]['precio_compra'] . "' readonly></td>";
-
                 echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda' value='" . $productos[$i]['precio_venta'] . "' readonly></td>";
-
                 echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda' value='" . $productos[$i]['precio_mayoreo'] . "' readonly></td>";
-
                 echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable' value='" . $productos[$i]['unidad'] . "' readonly></td>";
-
                 echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable' value='" . $productos[$i]['existencias'] . "' readonly></td>";
 
                 $categoria_actual = $obj_producto->getNombreCategoria($productos[$i]['categoria_id']);
-
                 echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable w-auto' disabled>";
+                echo "<option value=''></option>";
                 foreach ($obj_categoria->getAll() as $categoria) {
                     $selected = $categoria['nombre_categoria'] == $categoria_actual ? "selected" : "";
                     echo "<option value='" . $categoria['id'] . "' $selected>" . $categoria['nombre_categoria'] . "</option>";
@@ -77,8 +68,8 @@
                 echo "</select></td>";
 
                 $proveedor_actual = $obj_producto->getNombreProveedor($productos[$i]['proveedor_id']);
-
                 echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable w-auto' disabled>";
+                echo "<option value=''></option>";
                 foreach ($obj_proveedor->getAll() as $proveedor) {
                     $selected = $proveedor['nombre_proveedor'] == $proveedor_actual ? "selected" : "";
                     echo "<option value='" . $proveedor['id'] . "' $selected>" . $proveedor['nombre_proveedor'] . "</option>";
@@ -106,6 +97,50 @@
                 echo "</tr>";
                 echo "</form>";
             }
+
+            //fila vacia
+            echo "<form id='form_new' method='post'>";
+            echo "<tr id='productRow_new' class='d-none'>";
+            echo "<td></td>";
+            echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable'></td>";
+            echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable'></td>";
+            echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda'></td>";
+            echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda'></td>";
+            echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda'></td>";
+            echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable'></td>";
+            echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable'></td>";
+
+            echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable w-auto'>";
+            echo "<option value=''></option>";
+            foreach ($obj_categoria->getAll() as $categoria) {
+                echo "<option value='" . $categoria['id'] . "'>" . $categoria['nombre_categoria'] . "</option>";
+            }
+            echo "</select></td>";
+
+            echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable w-auto' >";
+            echo "<option value=''></option>";
+            foreach ($obj_proveedor->getAll() as $proveedor) {
+                echo "<option value='" . $proveedor['id'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
+            }
+            echo "</select></td>";
+
+            echo "<td>
+            
+            <button type='button' 
+                    onclick='fnCreateUpdate(\"CREATE\",\"new\")' class='btn btn-primary saveBtn'>
+                    <img src='../miscelanea_nelsy/public/images/check.svg'>
+            </button>
+            </td>";
+
+            echo "
+            <td>
+                <button type='button' 
+                onclick='deleteNewRow()' class='btn btn-danger'>
+                <img src='../miscelanea_nelsy/public/images/trash.svg'>
+                </button>
+            </td>";
+            echo "</tr>";
+            echo "</form>";
             ?>
 
         </tbody>

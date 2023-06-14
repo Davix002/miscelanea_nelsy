@@ -1,79 +1,9 @@
-function fn_modal_producto(action = "CREATE", id) {
-  let titleModal = document.getElementById("staticBackdropLabel");
+function fnCreateRow() {
+  document.getElementById('productRow_new').classList.remove('d-none');
+}
 
-  const btn_cerrar = document.querySelector("#btn_cerrar");
-
-  btn_cerrar.addEventListener("click", () => {
-    // Remover mensajes de error al cerrar el modal
-    const inputs = document.querySelectorAll("#form-modal-producto input");
-    removeErrorMessages(inputs);
-
-    const selects = document.querySelectorAll("#form-modal-producto select");
-    removeErrorMessages(selects);
-  });
-
-  if (action === "CREATE") {
-    titleModal.textContent = "Nuevo producto";
-
-    document.querySelector("#nombre_producto").value = "";
-    document.querySelector("#codigo_barras").value = "";
-    document.querySelector("#precio_compra").value = "";
-    document.querySelector("#precio_venta").value = "";
-    document.querySelector("#precio_mayoreo").value = "";
-    document.querySelector("#unidad").value = "";
-    document.querySelector("#existencias").value = "";
-    document.querySelector("#categoria_id").value = "";
-    document.querySelector("#proveedor_id").value = "";
-
-    const btnCreate = document.querySelector("#btnCreateUpdate");
-    btnCreate.setAttribute("onclick", "fnCreateUpdate('CREATE', '')");
-  } else {
-    const btnCreate = document.querySelector("#btnCreateUpdate");
-    btnCreate.setAttribute("onclick", "fnCreateUpdate('UPDATE'," + id + ")");
-
-    // Consultando producto
-    fetch(`app/controllers/producto_controller.php?action=show&id=${id}`, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            const producto = data.data;
-
-            document.querySelector("#nombre_producto").value =
-              producto.nombre_producto;
-              document.querySelector("#codigo_barras").value = 
-              producto.codigo_barras;
-            document.querySelector("#precio_compra").value =
-              producto.precio_compra;
-            document.querySelector("#precio_venta").value =
-              producto.precio_venta;
-            document.querySelector("#precio_mayoreo").value =
-              producto.precio_mayoreo;
-            document.querySelector("#unidad").value = producto.unidad;
-            document.querySelector("#existencias").value = producto.existencias;
-            document.querySelector("#categoria_id").value =
-              producto.categoria_id;
-            document.querySelector("#proveedor_id").value =
-              producto.proveedor_id;
-          });
-        } else {
-          alert("Error en el sistema");
-        }
-      })
-      .catch(function (error) {
-        alert("Error en el sistema.");
-      });
-
-    titleModal.textContent = "Modificar producto";
-  }
-
-  const btnModal = document.querySelector("#btnAbrirModal");
-
-  // Crear un objeto Modal
-  const modal = new bootstrap.Modal(btnModal);
-  // Mostrar el modal
-  modal.show();
+function deleteNewRow() {
+  document.getElementById('productRow_new').classList.add('d-none');
 }
 
 function enableEditing(id) {
@@ -99,13 +29,16 @@ function enableEditing(id) {
 
 function fnCreateUpdate(action = "CREATE", id = "") {
    let url = "";
+   let formElement;
   if (action === "CREATE") {
     url = "app/controllers/producto_controller.php?action=store";
+    formElement = document.getElementById("form_new");
   } else {
     url = "app/controllers/producto_controller.php?action=update";
+    formElement = document.getElementById("form_" + id);
   }
 
-  var formElement = document.getElementById('form_' + id); // idProducto es el id del producto que deseas enviar
+  //var formElement = document.getElementById('form_' + id); // idProducto es el id del producto que deseas enviar
   var formData = new FormData(formElement);
 
   
