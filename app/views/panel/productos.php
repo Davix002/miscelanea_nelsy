@@ -47,8 +47,9 @@
 
             for ($i = 0; $i < count($productos); $i++) {
 
-                echo "<form id='form_" . $productos[$i]['id'] . "' method='post'>";
+                
                 echo "<tr id='productRow_" . $productos[$i]['id'] . "'>";
+                echo "<form id='form_" . $productos[$i]['id'] . "' method='post'>";
                 echo "<td>" . $productos[$i]['id'] . "</td>";
                 echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable' value='" . $productos[$i]['nombre_producto'] . "' readonly></td>";
                 echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
@@ -94,13 +95,15 @@
                             <img src='../miscelanea_nelsy/public/images/trash.svg'>
                     </button>
                 </td>";
-                echo "</tr>";
                 echo "</form>";
+                echo "</tr>";
+                
             }
 
             //fila vacia
-            echo "<form id='form_new' method='post'>";
+            
             echo "<tr id='productRow_new' class='d-none'>";
+            echo "<form id='form_new' method='post'>";
             echo "<td></td>";
             echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable'></td>";
             echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable'></td>";
@@ -139,8 +142,11 @@
                 <img src='../miscelanea_nelsy/public/images/trash.svg'>
                 </button>
             </td>";
-            echo "</tr>";
+            
             echo "</form>";
+            echo "</tr>";
+            
+            //fin fila vacia
             ?>
 
         </tbody>

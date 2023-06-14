@@ -3,8 +3,22 @@ function fnCreateRow() {
 }
 
 function deleteNewRow() {
-  document.getElementById('productRow_new').classList.add('d-none');
+  const newRow = document.getElementById('productRow_new');
+  newRow.classList.add('d-none');
+
+  const inputs = newRow.querySelectorAll('.editable');
+
+  inputs.forEach(input => {
+    if (input.tagName === "SELECT") {
+      input.value = '';
+    } else {
+      input.value = '';
+    }
+  });
+
+  removeErrorMessages(inputs);
 }
+
 
 function enableEditing(id) {
   // Obtén todas las celdas de la fila por el id del producto
@@ -46,7 +60,6 @@ function fnCreateUpdate(action = "CREATE", id = "") {
   if (action === "UPDATE") {
     formData.append("id", id);
   }
-
     // Aquí va el código de fetch para enviar los datos al servidor
   fetch(`${url}`, {
     method: "POST",
@@ -62,14 +75,15 @@ function fnCreateUpdate(action = "CREATE", id = "") {
         response.json().then((data) => {
           const errors = data.data.error;
 
-          const inputs = formElement.querySelectorAll("input");
-
-          const selects = formElement.querySelectorAll("select");
+          const row = formElement.closest("tr");
+          const inputs = row.querySelectorAll("input");
+          const selects = row.querySelectorAll("select");
     
           // Remove previous error messages
           removeErrorMessages(inputs);
           removeErrorMessages(selects);
           // Add new error messages
+          
           addErrorMessages(formElement, errors);
         });
       }
@@ -89,16 +103,25 @@ function removeErrorMessages(inputs) {
 }
 
 function addErrorMessages(form, errors) {
-  for (const error in errors) {
-    const input = form.querySelector(`#${error}`);
-    const errorContainer = document.createElement("div");
+  // Obtiene el tr que contiene al formulario.
+  const row = form.closest("tr");
 
+  for (const error in errors) {
+    // Ahora seleccionamos el input desde el row en lugar del form.
+    const input = row.querySelector(`#${error}`);
+    if (!input) {
+      console.error(`No se pudo encontrar el elemento con id ${error} en la fila.`);
+      continue;
+    }
+    
+    const errorContainer = document.createElement("div");
     errorContainer.className = "error-message";
     errorContainer.innerHTML = errors[error];
-
-    input.parentNode.insertBefore(errorContainer, null);
+    input.insertAdjacentElement('afterend', errorContainer);
   }
 }
+
+
 
 function fnDelete(id) {
   if (confirm("¿Está seguro de desea eliminar el registro?")) {
