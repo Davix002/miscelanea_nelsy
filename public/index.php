@@ -17,7 +17,7 @@
     <title>MISCELANEA NELSY</title>
 </head>
 
-<body>
+<body >
     <?php
 
     session_start();

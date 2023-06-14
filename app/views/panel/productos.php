@@ -49,17 +49,17 @@
 
                 echo "<tr id='productRow_" . $productos[$i]['id'] . "'>";
                 echo "<form id='form_" . $productos[$i]['id'] . "' method='post'>";
-                echo "<td>" . $productos[$i]['id'] . "</td>";
-                echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable' value='" . $productos[$i]['nombre_producto'] . "' readonly></td>";
-                echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda' value='" . $productos[$i]['precio_compra'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda' value='" . $productos[$i]['precio_venta'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda' value='" . $productos[$i]['precio_mayoreo'] . "' readonly></td>";
-                echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable' value='" . $productos[$i]['unidad'] . "' readonly></td>";
-                echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable' value='" . $productos[$i]['existencias'] . "' readonly></td>";
+                echo "<td class='p-2'>" . $productos[$i]['id'] . "</td>";
+                echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['nombre_producto'] . "' readonly></td>";
+                echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable border-0 bg-transparent w-auto' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
+                echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_compra'] . "' readonly></td>";
+                echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_venta'] . "' readonly></td>";
+                echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_mayoreo'] . "' readonly></td>";
+                echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['unidad'] . "' readonly></td>";
+                echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['existencias'] . "' readonly></td>";
 
                 $categoria_actual = $obj_producto->getNombreCategoria($productos[$i]['categoria_id']);
-                echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable ' disabled>";
+                echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable border-0 bg-transparent w-auto' disabled>";
                 echo "<option value=''></option>";
                 foreach ($obj_categoria->getAll() as $categoria) {
                     $selected = $categoria['nombre_categoria'] == $categoria_actual ? "selected" : "";
@@ -68,7 +68,7 @@
                 echo "</select></td>";
 
                 $proveedor_actual = $obj_producto->getNombreProveedor($productos[$i]['proveedor_id']);
-                echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable ' disabled>";
+                echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable border-0 bg-transparent w-auto' disabled>";
                 echo "<option value=''></option>";
                 foreach ($obj_proveedor->getAll() as $proveedor) {
                     $selected = $proveedor['nombre_proveedor'] == $proveedor_actual ? "selected" : "";

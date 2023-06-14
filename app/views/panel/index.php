@@ -1,6 +1,7 @@
 <?php include __DIR__ . "/../modules/header.php"; ?>
 
-<div class="min-vh-100 container d-flex align-items-start justify-content-center">
+<div class='mx-5'>
+<div class="min-vh-100 container-fluid d-flex align-items-start justify-content-center">
 
         <?php
         if (isset($_GET["Pages"])) {
@@ -37,4 +38,8 @@
         ?>
 
 </div>
+
+</div>
+
+
 <?php include __DIR__ . "/../modules/footer.php"; ?>

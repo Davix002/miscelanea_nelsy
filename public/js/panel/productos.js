@@ -30,9 +30,11 @@ function enableEditing(id) {
     if (input.tagName === "SELECT") {
       input.setAttribute('data-original', input.value);
       input.removeAttribute('disabled');
+      input.classList.remove('border-0');
     } else {
       input.setAttribute('data-original', input.value);
       input.removeAttribute('readonly');
+      input.classList.remove('border-0');
     }
   });
 
@@ -59,9 +61,11 @@ function fnCancel(id){
     if (input.tagName === "SELECT") {
       input.value = input.getAttribute('data-original');
       input.setAttribute('disabled', true);
+      input.classList.add('border-0');
     } else {
       input.value = input.getAttribute('data-original');
       input.setAttribute('readonly', true);
+      input.classList.add('border-0');
     }
   });
 
