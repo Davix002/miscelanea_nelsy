@@ -90,8 +90,12 @@
                 echo "
                 <td>
                     <button type='button' 
-                            onclick='fnDelete(" . $productos[$i]['id'] . ")' class='btn btn-danger'>
+                            onclick='fnDelete(" . $productos[$i]['id'] . ")' class='btn btn-danger deleteBtn'>
                             <img src='../miscelanea_nelsy/public/images/trash.svg'>
+                    </button>
+                    <button type='button' 
+                            onclick='fnCancel(" . $productos[$i]['id'] . ")' class='btn btn-dark d-none cancelBtn'>
+                            <img src='../miscelanea_nelsy/public/images/cancel.svg'>
                     </button>
                 </td>";
                 echo "</form>";
@@ -136,8 +140,8 @@
             echo "
             <td>
                 <button type='button' 
-                onclick='deleteNewRow()' class='btn btn-danger'>
-                <img src='../miscelanea_nelsy/public/images/trash.svg'>
+                onclick='deleteNewRow()' class='btn btn-dark'>
+                <img src='../miscelanea_nelsy/public/images/cancel.svg'>
                 </button>
             </td>";
 

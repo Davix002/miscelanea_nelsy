@@ -25,11 +25,13 @@ function enableEditing(id) {
   const row = document.querySelector(`#productRow_${id}`);
   const inputs = row.querySelectorAll('.editable');
 
-  // Quita el atributo readonly para los inputs y disabled para los select
+  //guarda los valores originales del producto y habilita la edición de los campos
   inputs.forEach(input => {
     if (input.tagName === "SELECT") {
+      input.setAttribute('data-original', input.value);
       input.removeAttribute('disabled');
     } else {
+      input.setAttribute('data-original', input.value);
       input.removeAttribute('readonly');
     }
   });
@@ -39,7 +41,43 @@ function enableEditing(id) {
   const saveBtn = row.querySelector('.saveBtn');
   editBtn.classList.add('d-none');
   saveBtn.classList.remove('d-none');
+
+  // Muestra el botón de cancelar y esconde el de eliminar
+  const deleteBtn = row.querySelector('.deleteBtn');
+  const cancelBtn = row.querySelector('.cancelBtn');
+  deleteBtn.classList.add('d-none');
+  cancelBtn.classList.remove('d-none');
 }
+
+function fnCancel(id){
+  // Obtén todas las celdas de la fila por el id del producto
+  const row = document.querySelector(`#productRow_${id}`);
+  const inputs = row.querySelectorAll('.editable');
+
+  // Debe poner el atributo readonly para los inputs y disabled para los select
+  inputs.forEach(input => {
+    if (input.tagName === "SELECT") {
+      input.value = input.getAttribute('data-original');
+      input.setAttribute('disabled', true);
+    } else {
+      input.value = input.getAttribute('data-original');
+      input.setAttribute('readonly', true);
+    }
+  });
+
+  // Muestra el botón de editar y esconde el de guardar
+  const editBtn = row.querySelector('.editBtn');
+  const saveBtn = row.querySelector('.saveBtn');
+  editBtn.classList.remove('d-none');
+  saveBtn.classList.add('d-none');
+
+  // Muestra el botón de eliminar y esconde el de cancelar
+  const deleteBtn = row.querySelector('.deleteBtn');
+  const cancelBtn = row.querySelector('.cancelBtn');
+  deleteBtn.classList.remove('d-none');
+  cancelBtn.classList.add('d-none');
+}
+
 
 function fnCreateUpdate(action = "CREATE", id = "") {
    let url = "";
