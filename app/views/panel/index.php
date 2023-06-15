@@ -1,6 +1,6 @@
 <?php include __DIR__ . "/../modules/header.php"; ?>
 
-<div class='mx-5'>
+<div class='mx-3'>
 <div class="min-vh-100 container-fluid d-flex align-items-start justify-content-center">
 
         <?php

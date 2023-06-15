@@ -1,14 +1,10 @@
 <div class="row">
-    <!-- Button trigger modal -->
-
     <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="fnCreateRow()">
         Nuevo producto
     </button>
-
     <button type="button" class="col-3 btn btn-secondary my-3" onclick="printProductsToPDF()">
         Imprimir lista de productos en PDF
     </button>
-
     <div class="col-4 my-3">
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
     </div>
@@ -32,9 +28,7 @@
         </thead>
 
         <tbody>
-
             <?php
-
             require_once __DIR__ . "/../../models/Producto.php";
             $obj_producto = new Producto();
             $productos = $obj_producto->getAll();
@@ -49,17 +43,17 @@
 
                 echo "<tr id='productRow_" . $productos[$i]['id'] . "'>";
                 echo "<form id='form_" . $productos[$i]['id'] . "' method='post'>";
-                echo "<td class='p-2'>" . $productos[$i]['id'] . "</td>";
-                echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['nombre_producto'] . "' readonly></td>";
-                echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable border-0 bg-transparent w-auto' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_compra'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_venta'] . "' readonly></td>";
-                echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda border-0 bg-transparent' value='" . $productos[$i]['precio_mayoreo'] . "' readonly></td>";
-                echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['unidad'] . "' readonly></td>";
-                echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable border-0 bg-transparent' value='" . $productos[$i]['existencias'] . "' readonly></td>";
+                echo "<td class='w-auto p-2' >" . $productos[$i]['id'] . "</td>";
+                echo "<td class='w-auto' ><textarea style='resize:none;' name='nombre_producto' id='nombre_producto' class='form-control editable border-0 bg-transparent p-1' readonly>" . $productos[$i]['nombre_producto'] . "</textarea></td>";
+                echo "<td class='w-auto' ><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable border-0 bg-transparent p-1 w-auto' value='" . $productos[$i]['codigo_barras'] . "' readonly></td>";
+                echo "<td class='w-auto' ><input type='number' name='precio_compra' id='precio_compra' class='form-control editable moneda border-0 bg-transparent p-1' value='" . $productos[$i]['precio_compra'] . "' readonly></td>";
+                echo "<td class='w-auto' ><input type='number' name='precio_venta' id='precio_venta' class='form-control editable moneda border-0 bg-transparent p-1' value='" . $productos[$i]['precio_venta'] . "' readonly></td>";
+                echo "<td class='w-auto' ><input type='number' name='precio_mayoreo' id='precio_mayoreo' class='form-control editable moneda border-0 bg-transparent p-1' value='" . $productos[$i]['precio_mayoreo'] . "' readonly></td>";
+                echo "<td class='w-auto' ><input type='text' name='unidad' id='unidad' class='form-control editable border-0 bg-transparent p-1' value='" . $productos[$i]['unidad'] . "' readonly></td>";
+                echo "<td class='w-auto' ><input type='number' name='existencias' id='existencias' class='form-control editable border-0 bg-transparent p-1' value='" . $productos[$i]['existencias'] . "' readonly></td>";
 
                 $categoria_actual = $obj_producto->getNombreCategoria($productos[$i]['categoria_id']);
-                echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable border-0 bg-transparent w-auto' disabled>";
+                echo "<td class='w-auto'><select name='categoria_id' id='categoria_id' class='form-select editable border-0 bg-transparent w-auto pt-1 ps-1 pb-1' disabled>";
                 echo "<option value=''></option>";
                 foreach ($obj_categoria->getAll() as $categoria) {
                     $selected = $categoria['nombre_categoria'] == $categoria_actual ? "selected" : "";
@@ -68,7 +62,7 @@
                 echo "</select></td>";
 
                 $proveedor_actual = $obj_producto->getNombreProveedor($productos[$i]['proveedor_id']);
-                echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable border-0 bg-transparent w-auto' disabled>";
+                echo "<td class='w-auto'><select name='proveedor_id' id='proveedor_id' class='form-select editable border-0 bg-transparent w-auto pt-1 ps-1 pb-1' disabled>";
                 echo "<option value=''></option>";
                 foreach ($obj_proveedor->getAll() as $proveedor) {
                     $selected = $proveedor['nombre_proveedor'] == $proveedor_actual ? "selected" : "";
@@ -102,27 +96,25 @@
                 echo "</tr>";
             }
 
-            //fila vacia
-
             echo "<tr id='productRow_new' class='d-none'>";
             echo "<form id='form_new' method='post'>";
             echo "<td></td>";
-            echo "<td><input type='text' name='nombre_producto' id='nombre_producto' class='form-control editable'></td>";
-            echo "<td><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable'></td>";
-            echo "<td><input type='number' name='precio_compra' id='precio_compra_nueva_fila' class='form-control editable moneda'></td>";
-            echo "<td><input type='number' name='precio_venta' id='precio_venta_nueva_fila' class='form-control editable moneda'></td>";
-            echo "<td><input type='number' name='precio_mayoreo' id='precio_mayoreo_nueva_fila' class='form-control editable moneda'></td>";
-            echo "<td><input type='text' name='unidad' id='unidad' class='form-control editable'></td>";
-            echo "<td><input type='number' name='existencias' id='existencias' class='form-control editable'></td>";
+            echo "<td class='w-auto'><textarea style='resize:none;' name='nombre_producto' id='nombre_producto' class='form-control editable '></textarea></td>";
+            echo "<td class='w-auto'><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable p-1 w-auto'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_compra' id='precio_compra_nueva_fila' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_venta' id='precio_venta_nueva_fila' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_mayoreo' id='precio_mayoreo_nueva_fila' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='text' name='unidad' id='unidad' class='form-control editable p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='existencias' id='existencias' class='form-control editable p-1'></td>";
 
-            echo "<td><select name='categoria_id' id='categoria_id' class='form-select editable'>";
+            echo "<td class='w-auto'><select name='categoria_id' id='categoria_id' class='form-select editable pt-1 ps-1 pb-1'>";
             echo "<option value=''></option>";
             foreach ($obj_categoria->getAll() as $categoria) {
                 echo "<option value='" . $categoria['id'] . "'>" . $categoria['nombre_categoria'] . "</option>";
             }
             echo "</select></td>";
 
-            echo "<td><select name='proveedor_id' id='proveedor_id' class='form-select editable' >";
+            echo "<td class='w-auto'><select name='proveedor_id' id='proveedor_id' class='form-select editable pt-1 ps-1 pb-1' >";
             echo "<option value=''></option>";
             foreach ($obj_proveedor->getAll() as $proveedor) {
                 echo "<option value='" . $proveedor['id'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
@@ -147,8 +139,6 @@
 
             echo "</form>";
             echo "</tr>";
-
-            //fin fila vacia
             ?>
 
             <tr>
@@ -159,7 +149,6 @@
                 </td>
             </tr>
 
-            <!-- titulo de abajo -->
             <tr style="border-top: 2px solid #000;">
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>

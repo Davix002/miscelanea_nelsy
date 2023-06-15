@@ -19,6 +19,22 @@ function deleteNewRow() {
   removeErrorMessages(inputs);
 }
 
+function autoResizeTextAreas() {
+  let textareas = document.querySelectorAll('textarea');
+
+  textareas.forEach(textarea => {
+      textarea.addEventListener('input', event => {
+          event.target.style.height = 'auto'; 
+          event.target.style.height = event.target.scrollHeight + 'px'; 
+      });
+
+      // Creamos y disparamos el evento 'input' para cada textarea, para ajustar su altura inicial.
+      let evt = new Event('input', { bubbles: true, cancelable: false });
+      textarea.dispatchEvent(evt);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', autoResizeTextAreas);
 
 function enableEditing(id) {
   // Obtén todas las celdas de la fila por el id del producto
@@ -94,9 +110,10 @@ function fnCreateUpdate(action = "CREATE", id = "") {
     formElement = document.getElementById("form_" + id);
   }
 
-  //var formElement = document.getElementById('form_' + id); // idProducto es el id del producto que deseas enviar
   var formData = new FormData(formElement);
 
+
+  console.log(formData);
   
   // Añade el id si es una actualización
   if (action === "UPDATE") {

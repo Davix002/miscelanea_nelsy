@@ -12,12 +12,13 @@
             font-size: .875em;
             color: #dc3545;
         }
+
     </style>
 
     <title>MISCELANEA NELSY</title>
 </head>
 
-<body >
+<body>
     <?php
 
     session_start();
