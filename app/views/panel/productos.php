@@ -1,5 +1,5 @@
 <div class="row">
-    <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="fnCreateRow()">
+    <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="scrollToBottom()">
         Nuevo producto
     </button>
     <button type="button" class="col-3 btn btn-secondary my-3" onclick="printProductsToPDF()">
@@ -96,10 +96,10 @@
                 echo "</tr>";
             }
 
-            echo "<tr id='productRow_new' class='d-none'>";
+            echo "<tr id='productRow_new'>";
             echo "<form id='form_new' method='post'>";
-            echo "<td></td>";
-            echo "<td class='w-auto'><textarea style='resize:none;' name='nombre_producto' id='nombre_producto' class='form-control editable '></textarea></td>";
+            echo "<td class='w-auto ps-2 fs-5'>+</td>";
+            echo "<td class='w-auto'><textarea style='resize:none;' name='nombre_producto' id='nombre_producto_nuevo' class='form-control editable '></textarea></td>";
             echo "<td class='w-auto'><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable p-1 w-auto'></td>";
             echo "<td class='w-auto'><input type='number' name='precio_compra' id='precio_compra_nueva_fila' class='form-control editable moneda p-1'></td>";
             echo "<td class='w-auto'><input type='number' name='precio_venta' id='precio_venta_nueva_fila' class='form-control editable moneda p-1'></td>";
@@ -140,14 +140,6 @@
             echo "</form>";
             echo "</tr>";
             ?>
-
-            <tr>
-                <td colspan="12">
-                    <button type="button" class="col-2 btn btn-primary me-2 my-2 " onclick="fnCreateRow()">
-                        Nuevo producto
-                    </button>
-                </td>
-            </tr>
 
             <tr style="border-top: 2px solid #000;">
                 <th scope="col">Id</th>

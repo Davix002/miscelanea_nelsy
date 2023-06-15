@@ -1,10 +1,13 @@
-function fnCreateRow() {
-  document.getElementById('productRow_new').classList.remove('d-none');
+function scrollToBottom() {
+  var lastRow = document.getElementById('productRow_new');
+  lastRow.scrollIntoView({behavior: 'smooth'});
+  
+  var inputNombreProducto = document.getElementById('nombre_producto_nuevo');
+  inputNombreProducto.focus();
 }
 
 function deleteNewRow() {
   const newRow = document.getElementById('productRow_new');
-  newRow.classList.add('d-none');
 
   const inputs = newRow.querySelectorAll('.editable');
 
