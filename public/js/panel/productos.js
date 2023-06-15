@@ -140,10 +140,12 @@ function fnCreateUpdate(action = "CREATE", id = "") {
           const row = formElement.closest("tr");
           const inputs = row.querySelectorAll("input");
           const selects = row.querySelectorAll("select");
+          const textarea = row.querySelectorAll("textarea");
     
           // Remove previous error messages
           removeErrorMessages(inputs);
           removeErrorMessages(selects);
+          removeErrorMessages(textarea);
           // Add new error messages
           
           addErrorMessages(formElement, errors);
@@ -165,17 +167,20 @@ function removeErrorMessages(inputs) {
 }
 
 function addErrorMessages(form, errors) {
-  // Obtiene el tr que contiene al formulario.
   const row = form.closest("tr");
 
   for (const error in errors) {
-    // Ahora seleccionamos el input desde el row en lugar del form.
-    const input = row.querySelector(`#${error}`);
+    let input = row.querySelector(`#${error}`);
     if (!input) {
-      console.error(`No se pudo encontrar el elemento con id ${error} en la fila.`);
-      continue;
+      // Si no se encontró el elemento con el ID original, busca el nuevo ID
+      input = row.querySelector(`#${error}_nuevo`);
+      if (!input) {
+        // Si tampoco se encuentra el nuevo ID, registra un error y continúa con el siguiente error
+        console.error(`No se pudo encontrar el elemento con id ${error} o ${error}_nuevo en la fila.`);
+        continue;
+      }
     }
-    
+
     const errorContainer = document.createElement("div");
     errorContainer.className = "error-message";
     errorContainer.innerHTML = errors[error];
@@ -237,7 +242,7 @@ function filterProducts() {
   }
 }
 
-let precio_compra = document.getElementById("precio_compra_nueva_fila");
+let precio_compra = document.getElementById("precio_compra_nuevo");
 precio_compra.addEventListener("input", calcular_precio);
 
 function roundToMultipleOf100(value) {
@@ -245,19 +250,19 @@ function roundToMultipleOf100(value) {
 }
 
 function calcular_precio() {
-  let precio_compra_value = document.getElementById("precio_compra_nueva_fila").value;
+  let precio_compra_value = document.getElementById("precio_compra_nuevo").value;
 
   if (precio_compra_value <= 0 || precio_compra_value == "") {
-    document.getElementById("precio_venta_nueva_fila").value = "";
-    document.getElementById("precio_mayoreo_nueva_fila").value = "";
+    document.getElementById("precio_venta_nuevo").value = "";
+    document.getElementById("precio_mayoreo_nuevo").value = "";
   } else {
     let precio_venta = precio_compra_value * 1.25;
     precio_venta = roundToMultipleOf100(precio_venta) + 100;
-    document.getElementById("precio_venta_nueva_fila").value = precio_venta;
+    document.getElementById("precio_venta_nuevo").value = precio_venta;
 
-    let precio_mayoreo = document.getElementById("precio_venta_nueva_fila").value * 0.9;
+    let precio_mayoreo = document.getElementById("precio_venta_nuevo").value * 0.9;
     precio_mayoreo = roundToMultipleOf100(precio_mayoreo);
-    document.getElementById("precio_mayoreo_nueva_fila").value = precio_mayoreo;
+    document.getElementById("precio_mayoreo_nuevo").value = precio_mayoreo;
   }
 }
 

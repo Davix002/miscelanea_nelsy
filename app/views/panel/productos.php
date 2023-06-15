@@ -101,9 +101,9 @@
             echo "<td class='w-auto ps-2 fs-5'>+</td>";
             echo "<td class='w-auto'><textarea style='resize:none;' name='nombre_producto' id='nombre_producto_nuevo' class='form-control editable '></textarea></td>";
             echo "<td class='w-auto'><input type='text' name='codigo_barras' id='codigo_barras' class='form-control editable p-1 w-auto'></td>";
-            echo "<td class='w-auto'><input type='number' name='precio_compra' id='precio_compra_nueva_fila' class='form-control editable moneda p-1'></td>";
-            echo "<td class='w-auto'><input type='number' name='precio_venta' id='precio_venta_nueva_fila' class='form-control editable moneda p-1'></td>";
-            echo "<td class='w-auto'><input type='number' name='precio_mayoreo' id='precio_mayoreo_nueva_fila' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_compra' id='precio_compra_nuevo' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_venta' id='precio_venta_nuevo' class='form-control editable moneda p-1'></td>";
+            echo "<td class='w-auto'><input type='number' name='precio_mayoreo' id='precio_mayoreo_nuevo' class='form-control editable moneda p-1'></td>";
             echo "<td class='w-auto'><input type='text' name='unidad' id='unidad' class='form-control editable p-1'></td>";
             echo "<td class='w-auto'><input type='number' name='existencias' id='existencias' class='form-control editable p-1'></td>";
 
