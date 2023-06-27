@@ -141,7 +141,9 @@
             echo "</tr>";
             ?>
 
-            <tr style="border-top: 2px solid #000;">
+        </tbody>
+        <thead >
+        <tr style="border-top: 2px solid #000;">
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Código de Barras</th>
@@ -155,8 +157,7 @@
                 <th scope="col">Editar</th>
                 <th scope="col">Eliminar</th>
             </tr>
-
-        </tbody>
+        </thead>
 
     </table>
     <script src="public/js/panel/productos.js"></script>
