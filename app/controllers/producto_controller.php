@@ -18,7 +18,7 @@ class Producto_controller{
     public function store() {
 
         $error = [];
-        $error = $this->validar_producto($_POST);
+        $error = $this->validar_producto();
         if (count($error) > 0) {
             http_response_code(422);
             $response['data']['error'] = $error;
@@ -41,7 +41,7 @@ class Producto_controller{
 
     public function update() {
         $error = [];
-        $error = $this->validar_producto($_POST);
+        $error = $this->validar_producto();
         if (count($error) > 0) {
             http_response_code(422);
             $response['data']['error'] = $error;

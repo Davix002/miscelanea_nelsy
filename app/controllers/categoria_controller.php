@@ -22,7 +22,7 @@ class Categoria_controller
     {
 
         $error = [];
-        $error = $this->validar_categoria($_POST);
+        $error = $this->validar_categoria();
         if (count($error) > 0) {
             http_response_code(422);
             $response['data']['error'] = $error;
@@ -46,7 +46,7 @@ class Categoria_controller
     public function update()
     {
         $error = [];
-        $error = $this->validar_categoria($_POST);
+        $error = $this->validar_categoria();
         if (count($error) > 0) {
             http_response_code(422);
             $response['data']['error'] = $error;

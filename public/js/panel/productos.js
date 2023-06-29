@@ -1,59 +1,43 @@
 function scrollToBottom() {
-  var lastRow = document.getElementById('productRow_new');
+  let lastRow = document.getElementById('productRow_new');
   lastRow.scrollIntoView({behavior: 'smooth'});
   
-  var inputNombreProducto = document.getElementById('nombre_producto_nuevo');
+  let inputNombreProducto = document.getElementById('nombre_producto_nuevo');
   inputNombreProducto.focus();
 }
 
 function deleteNewRow() {
   const newRow = document.getElementById('productRow_new');
 
-  const inputs = newRow.querySelectorAll('.editable');
+  const dataCells = newRow.querySelectorAll('.editable');
 
-  inputs.forEach(input => {
-    if (input.tagName === "SELECT") {
-      input.value = '';
+  dataCells.forEach(dataCell => {
+    if (dataCell.classList.contains("categoria_id") || dataCell.classList.contains("proveedor_id")) {
+      const dataSelect = dataCell.querySelector("select");
+      dataSelect.value = '';
     } else {
-      input.value = '';
+      dataCell.textContent = '';
     }
   });
 
-  removeErrorMessages(inputs);
+  removeErrorMessages(newRow);
 }
-
-function autoResizeTextAreas() {
-  let textareas = document.querySelectorAll('textarea');
-
-  textareas.forEach(textarea => {
-      textarea.addEventListener('input', event => {
-          event.target.style.height = 'auto'; 
-          event.target.style.height = event.target.scrollHeight + 'px'; 
-      });
-
-      // Creamos y disparamos el evento 'input' para cada textarea, para ajustar su altura inicial.
-      let evt = new Event('input', { bubbles: true, cancelable: false });
-      textarea.dispatchEvent(evt);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', autoResizeTextAreas);
 
 function enableEditing(id) {
   // Obtén todas las celdas de la fila por el id del producto
   const row = document.querySelector(`#productRow_${id}`);
-  const inputs = row.querySelectorAll('.editable');
+  const dataCells = row.querySelectorAll('.editable');
 
   //guarda los valores originales del producto y habilita la edición de los campos
-  inputs.forEach(input => {
-    if (input.tagName === "SELECT") {
-      input.setAttribute('data-original', input.value);
-      input.removeAttribute('disabled');
-      input.classList.remove('border-0');
+  dataCells.forEach(dataCell => {
+    if (dataCell.classList.contains("categoria_id") || dataCell.classList.contains("proveedor_id")) {
+      const dataSelect = dataCell.querySelector('select');
+
+      dataSelect.setAttribute('data-original', dataSelect.value);
+      dataSelect.removeAttribute('disabled');
     } else {
-      input.setAttribute('data-original', input.value);
-      input.removeAttribute('readonly');
-      input.classList.remove('border-0');
+      dataCell.setAttribute('data-original', dataCell.textContent);
+      dataCell.setAttribute('contenteditable', true);
     }
   });
 
@@ -73,18 +57,18 @@ function enableEditing(id) {
 function fnCancel(id){
   // Obtén todas las celdas de la fila por el id del producto
   const row = document.querySelector(`#productRow_${id}`);
-  const inputs = row.querySelectorAll('.editable');
+  const dataCells = row.querySelectorAll('.editable');
 
   // Debe poner el atributo readonly para los inputs y disabled para los select
-  inputs.forEach(input => {
-    if (input.tagName === "SELECT") {
-      input.value = input.getAttribute('data-original');
-      input.setAttribute('disabled', true);
-      input.classList.add('border-0');
+  dataCells.forEach(dataCell => {
+    if (dataCell.classList.contains("categoria_id") || dataCell.classList.contains("proveedor_id")) {
+      const dataSelect = dataCell.querySelector('select');
+
+      dataSelect.value = dataSelect.getAttribute('data-original');
+      dataSelect.setAttribute('disabled', true);
     } else {
-      input.value = input.getAttribute('data-original');
-      input.setAttribute('readonly', true);
-      input.classList.add('border-0');
+      dataCell.textContent = dataCell.getAttribute('data-original');
+      dataCell.setAttribute('contenteditable', false);
     }
   });
 
@@ -99,29 +83,99 @@ function fnCancel(id){
   const cancelBtn = row.querySelector('.cancelBtn');
   deleteBtn.classList.remove('d-none');
   cancelBtn.classList.add('d-none');
+
+  removeErrorMessages(row);
 }
 
-
 function fnCreateUpdate(action = "CREATE", id = "") {
+
+  const row = document.querySelector(`#productRow_${id}`);
+
+  const formulario = document.createElement("form");
+  formulario.id = `form_${id}`;
+
+  const inputName = document.createElement("input");
+  inputName.type= "text";
+  inputName.name = "nombre_producto"
+  const nameData = row.querySelector('.nombre_producto');
+  inputName.value =  nameData.textContent;
+  formulario.appendChild(inputName);
+
+  const inputBarcode = document.createElement("input");
+  inputBarcode.type= "text";
+  inputBarcode.name = "codigo_barras"
+  const barcodeData = row.querySelector('.codigo_barras');
+  inputBarcode.value =  barcodeData.textContent;
+  formulario.appendChild(inputBarcode);
+
+  const inputPurchasePrice = document.createElement("input");
+  inputPurchasePrice.type= "number";
+  inputPurchasePrice.name = "precio_compra"
+  const purchasePriceData = row.querySelector('.precio_compra');
+  inputPurchasePrice.value = cleanAndConvertToNumber(purchasePriceData.textContent);
+  formulario.appendChild(inputPurchasePrice);
+
+  const inputSellingPrice = document.createElement("input");
+  inputSellingPrice.type= "number";
+  inputSellingPrice.name = "precio_venta"
+  const sellingPriceData = row.querySelector('.precio_venta');
+  inputSellingPrice.value = cleanAndConvertToNumber(sellingPriceData.textContent);
+  formulario.appendChild(inputSellingPrice);
+
+  const inputWholesalePrice = document.createElement("input");
+  inputWholesalePrice.type= "number";
+  inputWholesalePrice.name = "precio_mayoreo"
+  const wholesalePriceData = row.querySelector('.precio_mayoreo');
+  inputWholesalePrice.value = cleanAndConvertToNumber(wholesalePriceData.textContent);
+  formulario.appendChild(inputWholesalePrice);
+
+  const inputUnit = document.createElement("input");
+  inputUnit.type= "text";
+  inputUnit.name = "unidad"
+  const unitData = row.querySelector('.unidad');
+  inputUnit.value =  unitData.textContent;
+  formulario.appendChild(inputUnit);
+
+  const inputStock = document.createElement("input");
+  inputStock.type= "number";
+  inputStock.name = "existencias"
+  const stockData = row.querySelector('.existencias');
+  inputStock.value =  stockData.textContent;
+  formulario.appendChild(inputStock);
+
+  const categoryData = row.querySelector('.categoria_id');
+  const selectedCategory = categoryData.querySelector('select').value;
+  const inputCategory = document.createElement("input");
+  inputCategory.type = "number";
+  inputCategory.name = "categoria_id";
+  inputCategory.value = selectedCategory;
+  formulario.appendChild(inputCategory);
+
+  const supplierData = row.querySelector('.proveedor_id');
+  const selectedSupplier = supplierData.querySelector('select').value;
+  const inputSupplier = document.createElement("input");
+  inputSupplier.type = "number";
+  inputSupplier.name = "proveedor_id";
+  inputSupplier.value = selectedSupplier;
+  formulario.appendChild(inputSupplier);
+
    let url = "";
    let formElement;
   if (action === "CREATE") {
     url = "app/controllers/producto_controller.php?action=store";
-    formElement = document.getElementById("form_new");
+    formElement = formulario;
   } else {
     url = "app/controllers/producto_controller.php?action=update";
-    formElement = document.getElementById("form_" + id);
+    formElement = formulario;
   }
 
-  var formData = new FormData(formElement);
+  let formData = new FormData(formElement);
 
-
-  console.log(formData);
-  
   // Añade el id si es una actualización
   if (action === "UPDATE") {
     formData.append("id", id);
   }
+
     // Aquí va el código de fetch para enviar los datos al servidor
   fetch(`${url}`, {
     method: "POST",
@@ -137,18 +191,11 @@ function fnCreateUpdate(action = "CREATE", id = "") {
         response.json().then((data) => {
           const errors = data.data.error;
 
-          const row = formElement.closest("tr");
-          const inputs = row.querySelectorAll("input");
-          const selects = row.querySelectorAll("select");
-          const textarea = row.querySelectorAll("textarea");
-    
-          // Remove previous error messages
-          removeErrorMessages(inputs);
-          removeErrorMessages(selects);
-          removeErrorMessages(textarea);
-          // Add new error messages
+          const row = document.querySelector(`#productRow_${id}`);
+
+          removeErrorMessages(row);
           
-          addErrorMessages(formElement, errors);
+          addErrorMessages(row, errors);
         });
       }
     })
@@ -157,36 +204,50 @@ function fnCreateUpdate(action = "CREATE", id = "") {
     });
 }
 
-function removeErrorMessages(inputs) {
-  inputs.forEach((input) => {
-    const errorContainer = input.nextElementSibling;
-    if (errorContainer && errorContainer.classList.contains("error-message")) {
-      errorContainer.remove();
-    }
-  });
-}
+function removeErrorMessages(row) {
+  // Encuentra la fila adyacente que contiene los mensajes de error
+  const errorRow = row.nextElementSibling;
 
-function addErrorMessages(form, errors) {
-  const row = form.closest("tr");
-
-  for (const error in errors) {
-    let input = row.querySelector(`#${error}`);
-    if (!input) {
-      // Si no se encontró el elemento con el ID original, busca el nuevo ID
-      input = row.querySelector(`#${error}_nuevo`);
-      if (!input) {
-        // Si tampoco se encuentra el nuevo ID, registra un error y continúa con el siguiente error
-        console.error(`No se pudo encontrar el elemento con id ${error} o ${error}_nuevo en la fila.`);
-        continue;
-      }
-    }
-
-    const errorContainer = document.createElement("div");
-    errorContainer.className = "error-message";
-    errorContainer.innerHTML = errors[error];
-    input.insertAdjacentElement('afterend', errorContainer);
+  // Verificar si la fila adyacente existe y contiene mensajes de error
+  if (errorRow && errorRow.querySelector('.error-message')) {
+    errorRow.remove();
   }
 }
+
+
+function addErrorMessages(row, errors) {
+
+  const tableRow = document.createElement("tr");
+
+  // Crear un arreglo con las clases de las celdas en el orden en que aparecen
+  const cellClasses = [
+    'nombre_producto', 'codigo_barras', 'precio_compra', 'precio_venta',
+    'precio_mayoreo', 'unidad', 'existencias', 'categoria_id', 'proveedor_id'
+  ];
+
+  // Añadir una celda vacía al principio para "Id"
+  tableRow.appendChild(document.createElement("td"));
+
+  for (const cellClass of cellClasses) {
+    const dataCell = row.querySelector(`.${cellClass}`);
+    const errorContainer = document.createElement("td");
+
+    if (errors[cellClass]) {
+      errorContainer.classList.add("error-message");
+      errorContainer.innerHTML = errors[cellClass];
+    }
+
+    // Añadir la celda de error a la nueva fila (esté vacía o contenga un mensaje de error)
+    tableRow.appendChild(errorContainer);
+  }
+
+  // Añadir celdas vacías al final para "Editar" y "Eliminar"
+  tableRow.appendChild(document.createElement("td"));
+  tableRow.appendChild(document.createElement("td"));
+
+  row.insertAdjacentElement('afterend', tableRow);
+}
+
 
 function fnDelete(id) {
   if (confirm("¿Está seguro de desea eliminar el registro?")) {
@@ -242,35 +303,92 @@ function filterProducts() {
   }
 }
 
-let precio_compra = document.getElementById("precio_compra_nuevo");
-precio_compra.addEventListener("input", calcular_precio);
+function cleanAndConvertToNumber(text) {
+  text = text.replace(/\./g, ''); // Eliminar puntos de miles
+  text = text.replace(/,/g, '.'); // Cambiar comas por puntos
+  text = text.replace(/[$]/g, ''); // Eliminar el signo de la moneda
+  return parseFloat(text) || '';
+}
 
 function roundToMultipleOf100(value) {
   return Math.round(value / 100) * 100;
 }
 
 function calcular_precio() {
-  let precio_compra_value = document.getElementById("precio_compra_nuevo").value;
+  let precio_compra_text = document.getElementById("precio_compra_nuevo").textContent;
+  let precio_compra = cleanAndConvertToNumber(precio_compra_text);
 
-  if (precio_compra_value <= 0 || precio_compra_value == "") {
-    document.getElementById("precio_venta_nuevo").value = "";
-    document.getElementById("precio_mayoreo_nuevo").value = "";
+  console.log(precio_compra);
+
+  if (precio_compra <= 0 || precio_compra == "") {
+    document.getElementById("precio_venta_nuevo").textContent = "";
+    document.getElementById("precio_mayoreo_nuevo").textContent = "";
   } else {
-    let precio_venta = precio_compra_value * 1.25;
+    let precio_venta = precio_compra * 1.25;
     precio_venta = roundToMultipleOf100(precio_venta) + 100;
-    document.getElementById("precio_venta_nuevo").value = precio_venta;
 
-    let precio_mayoreo = document.getElementById("precio_venta_nuevo").value * 0.9;
+    let precio_mayoreo = precio_venta * 0.9;
     precio_mayoreo = roundToMultipleOf100(precio_mayoreo);
-    document.getElementById("precio_mayoreo_nuevo").value = precio_mayoreo;
+
+    // Guarda los valores antes de darles formato
+    let precio_venta_sin_formato = precio_venta;
+    let precio_mayoreo_sin_formato = precio_mayoreo;
+
+    // Dar formato a los valores
+    precio_venta = formatCurrency(precio_venta);
+    precio_mayoreo = formatCurrency(precio_mayoreo);
+
+    // Actualizar la UI con los valores formateados
+    document.getElementById("precio_venta_nuevo").textContent = precio_venta;
+    document.getElementById("precio_mayoreo_nuevo").textContent = precio_mayoreo;
+
+    // Usa las variables sin formato para cualquier cálculo adicional
+    console.log(precio_venta_sin_formato, precio_mayoreo_sin_formato);
   }
 }
 
-const monedas = document.querySelectorAll(".moneda");
-monedas.forEach((moneda) => {
-  moneda.textContent = new Intl.NumberFormat("es-CO", {
+function formatCurrency(value) {
+  return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
     minimumFractionDigits: 0,
-  }).format(parseFloat(moneda.textContent));
+  }).format(value);
+}
+
+function formatCurrencyElement(element) {
+  const valor = cleanAndConvertToNumber(element.textContent);
+
+  if (valor === 0 || isNaN(valor)) {
+    // Si no es un número, establecer el contenido del texto a un espacio en blanco
+    element.textContent = '';
+  } else {
+    // Si es un número, darle formato de moneda
+    element.textContent = formatCurrency(valor);
+  }
+  // Establecer la posición del cursor al final del contenido
+  setCaretAtEnd(element);
+}
+
+
+function setCaretAtEnd(element) {
+  const range = document.createRange();
+  const selection = window.getSelection();
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  element.focus();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Formatear inicialmente todos los elementos con la clase moneda
+  const monedas = document.querySelectorAll(".moneda");
+  monedas.forEach(formatCurrencyElement);
+
+  // Agregar un event listener para el elemento 'precio_compra_nuevo'
+  const precioCompraNuevo = document.getElementById('precio_compra_nuevo');
+  precioCompraNuevo.addEventListener('input', () => {
+    formatCurrencyElement(precioCompraNuevo);
+    calcular_precio();
+  }); 
 });
