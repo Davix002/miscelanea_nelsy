@@ -262,6 +262,42 @@ function filterProducts() {
   }
 }
 
+function roundToMultipleOf100(value) {
+  return Math.round(value / 100) * 100;
+}
+
+function setCaretAtEnd(element) {
+  const range = document.createRange();
+  const selection = window.getSelection();
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  element.focus();
+}
+
+function formatCurrencyElement(element, fromDatabase) {
+  let valor;
+
+  if (fromDatabase) {
+    // Usar esta cuando se cargan los datos es decir en el evento DOMContentLoaded
+    valor = cleanAndConvertToNumber(element.textContent);
+  } else {
+    // Usar este cuando se está escribiendo el texto es decir en el evento input
+    valor = removeCurrencyFormat(element.textContent);
+  }
+
+  if (valor === 0 || valor === '' || isNaN(valor)) {
+    // Si no es un número, establecer el contenido del texto a un espacio en blanco
+    element.textContent = '';
+  } else {
+    // Si es un número, darle formato de moneda
+    element.textContent = formatCurrency(valor);
+  }
+  // Establecer la posición del cursor al final del contenido
+  setCaretAtEnd(element);
+}
+
 function cleanAndConvertToNumber(text) {
   return parseFloat(text.replace(/[$,]/g, '')) || '';
 }
@@ -273,8 +309,12 @@ function removeCurrencyFormat(text) {
   return parseFloat(text) || '';
 }
 
-function roundToMultipleOf100(value) {
-  return Math.round(value / 100) * 100;
+function formatCurrency(value) {
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
+  }).format(value);
 }
 
 function calcular_precio() {
@@ -301,55 +341,85 @@ function calcular_precio() {
   }
 }
 
-function formatCurrency(value) {
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    minimumFractionDigits: 0,
-  }).format(value);
-}
+function recalcularPreciosFila(elementoPrecioCompra) {
+  // Obtener el elemento de la fila
+  const fila = elementoPrecioCompra.closest('tr');
+  
+  // Obtener los elementos de precio de venta y mayoreo en la misma fila
+  const precioVenta = fila.querySelector('.precio_venta');
+  const precioMayoreo = fila.querySelector('.precio_mayoreo');
+  
+  // Obtener el valor del precio de compra
+  const precioCompra = removeCurrencyFormat(elementoPrecioCompra.textContent);
 
-function setCaretAtEnd(element) {
-  const range = document.createRange();
-  const selection = window.getSelection();
-  range.selectNodeContents(element);
-  range.collapse(false);
-  selection.removeAllRanges();
-  selection.addRange(range);
-  element.focus();
-}
-
-function formatCurrencyElement(element, fromDatabase) {
-  let valor;
-
-  if (fromDatabase) {
-    // Usar esta cuando se cargan los datos es decir en el evento DOMContentLoaded
-    valor = cleanAndConvertToNumber(element.textContent);
+  // Calcular y actualizar los precios de venta y mayoreo
+  if (precioCompra <= 0 || precioCompra == "") {
+    precioVenta.textContent = "";
+    precioMayoreo.textContent = "";
   } else {
-    // Usar este cuando se está escribiendo el texto es decir en el evento input
-    valor = removeCurrencyFormat(element.textContent);
-  }
+    let precio_venta = precioCompra * 1.25;
+    precio_venta = roundToMultipleOf100(precio_venta) + 100;
 
-  if (valor === 0 || isNaN(valor)) {
-    // Si no es un número, establecer el contenido del texto a un espacio en blanco
-    element.textContent = '';
-  } else {
-    // Si es un número, darle formato de moneda
-    element.textContent = formatCurrency(valor);
+    let precio_mayoreo = precio_venta * 0.9;
+    precio_mayoreo = roundToMultipleOf100(precio_mayoreo);
+
+    // Dar formato a los valores
+    precio_venta = formatCurrency(precio_venta);
+    precio_mayoreo = formatCurrency(precio_mayoreo);
+
+    // Actualizar la UI con los valores formateados
+    precioVenta.textContent = precio_venta;
+    precioMayoreo.textContent = precio_mayoreo;
   }
-  // Establecer la posición del cursor al final del contenido
-  setCaretAtEnd(element);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   // Formatear inicialmente todos los elementos con la clase moneda
   const monedas = document.querySelectorAll(".moneda");
-  monedas.forEach((element) => formatCurrencyElement(element, true)); // true indica que los datos provienen de la base de datos
+  monedas.forEach((element) => formatCurrencyElement(element, true));
 
   // Agregar un event listener para el elemento 'precio_compra_nuevo'
   const precioCompraNuevo = document.getElementById('precio_compra_nuevo');
   precioCompraNuevo.addEventListener('input', () => {
-    formatCurrencyElement(precioCompraNuevo, false); // false indica que los datos están siendo ingresados por el usuario
+    formatCurrencyElement(precioCompraNuevo, false);
     calcular_precio();
   });
+
+  // Agregar event listeners a todos los elementos con la clase 'precio_compra'
+  const preciosCompra = document.querySelectorAll(".precio_compra");
+  preciosCompra.forEach(precioCompra => {
+    precioCompra.addEventListener('input', () => {
+      formatCurrencyElement(precioCompra, false);
+      recalcularPreciosFila(precioCompra); 
+    });
+  });
+
+  // Agregar event listeners a todos los elementos con la clase 'precio_venta'
+  const preciosVenta = document.querySelectorAll(".precio_venta");
+  preciosVenta.forEach(precioVenta => {
+    precioVenta.addEventListener('input', () => {
+      formatCurrencyElement(precioVenta, false);
+    });
+  });
+
+  // Agregar un event listener para el elemento 'precio_venta_nuevo'
+  const precioVentaNuevo = document.getElementById('precio_venta_nuevo');
+  precioVentaNuevo.addEventListener('input', () => {
+    formatCurrencyElement(precioVentaNuevo, false);
+  });
+
+  // Agregar event listeners a todos los elementos con la clase 'precio_mayoreo'
+  const preciosMayoreo = document.querySelectorAll(".precio_mayoreo");
+  preciosMayoreo.forEach(precioMayoreo => {
+    precioMayoreo.addEventListener('input', () => {
+      formatCurrencyElement(precioMayoreo, false);
+    });
+  });
+
+  // Agregar un event listener para el elemento 'precio_mayoreo_nuevo'
+  const precioMayoreoNuevo = document.getElementById('precio_mayoreo_nuevo');
+  precioMayoreoNuevo.addEventListener('input', () => {
+    formatCurrencyElement(precioMayoreoNuevo, false);
+  });
+
 });
