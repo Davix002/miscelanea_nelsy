@@ -87,94 +87,54 @@ function fnCancel(id){
   removeErrorMessages(row);
 }
 
+function createInputAndAppendToForm(form, type, name, value) {
+  const input = document.createElement("input");
+  input.type = type;
+  input.name = name;
+  input.value = value;
+  form.appendChild(input);
+}
+
+function getElementValueFromRow(row, className, isSelect = false) {
+  const elementData = row.querySelector(`.${className}`);
+  if (isSelect) {
+    return elementData.querySelector('select').value;
+  }
+  return elementData.textContent;
+}
+
+function fillDynamicForm(row, formulario){
+  createInputAndAppendToForm(formulario, "text", "nombre_producto", getElementValueFromRow(row, 'nombre_producto'));
+  createInputAndAppendToForm(formulario, "text", "codigo_barras", getElementValueFromRow(row, 'codigo_barras'));
+  createInputAndAppendToForm(formulario, "number", "precio_compra", removeCurrencyFormat(getElementValueFromRow(row, 'precio_compra')));
+  createInputAndAppendToForm(formulario, "number", "precio_venta", removeCurrencyFormat(getElementValueFromRow(row, 'precio_venta')));
+  createInputAndAppendToForm(formulario, "number", "precio_mayoreo", removeCurrencyFormat(getElementValueFromRow(row, 'precio_mayoreo')));
+  createInputAndAppendToForm(formulario, "text", "unidad", getElementValueFromRow(row, 'unidad'));
+  createInputAndAppendToForm(formulario, "number", "existencias", getElementValueFromRow(row, 'existencias'));
+  createInputAndAppendToForm(formulario, "number", "categoria_id", getElementValueFromRow(row, 'categoria_id', true));
+  createInputAndAppendToForm(formulario, "number", "proveedor_id", getElementValueFromRow(row, 'proveedor_id', true));
+}
+
 function fnCreateUpdate(action = "CREATE", id = "") {
 
   const row = document.querySelector(`#productRow_${id}`);
-
   const formulario = document.createElement("form");
   formulario.id = `form_${id}`;
 
-  const inputName = document.createElement("input");
-  inputName.type= "text";
-  inputName.name = "nombre_producto"
-  const nameData = row.querySelector('.nombre_producto');
-  inputName.value =  nameData.textContent;
-  formulario.appendChild(inputName);
-
-  const inputBarcode = document.createElement("input");
-  inputBarcode.type= "text";
-  inputBarcode.name = "codigo_barras"
-  const barcodeData = row.querySelector('.codigo_barras');
-  inputBarcode.value =  barcodeData.textContent;
-  formulario.appendChild(inputBarcode);
-
-  const inputPurchasePrice = document.createElement("input");
-  inputPurchasePrice.type= "number";
-  inputPurchasePrice.name = "precio_compra"
-  const purchasePriceData = row.querySelector('.precio_compra');
-  inputPurchasePrice.value = cleanAndConvertToNumber(purchasePriceData.textContent);
-  formulario.appendChild(inputPurchasePrice);
-
-  const inputSellingPrice = document.createElement("input");
-  inputSellingPrice.type= "number";
-  inputSellingPrice.name = "precio_venta"
-  const sellingPriceData = row.querySelector('.precio_venta');
-  inputSellingPrice.value = cleanAndConvertToNumber(sellingPriceData.textContent);
-  formulario.appendChild(inputSellingPrice);
-
-  const inputWholesalePrice = document.createElement("input");
-  inputWholesalePrice.type= "number";
-  inputWholesalePrice.name = "precio_mayoreo"
-  const wholesalePriceData = row.querySelector('.precio_mayoreo');
-  inputWholesalePrice.value = cleanAndConvertToNumber(wholesalePriceData.textContent);
-  formulario.appendChild(inputWholesalePrice);
-
-  const inputUnit = document.createElement("input");
-  inputUnit.type= "text";
-  inputUnit.name = "unidad"
-  const unitData = row.querySelector('.unidad');
-  inputUnit.value =  unitData.textContent;
-  formulario.appendChild(inputUnit);
-
-  const inputStock = document.createElement("input");
-  inputStock.type= "number";
-  inputStock.name = "existencias"
-  const stockData = row.querySelector('.existencias');
-  inputStock.value =  stockData.textContent;
-  formulario.appendChild(inputStock);
-
-  const categoryData = row.querySelector('.categoria_id');
-  const selectedCategory = categoryData.querySelector('select').value;
-  const inputCategory = document.createElement("input");
-  inputCategory.type = "number";
-  inputCategory.name = "categoria_id";
-  inputCategory.value = selectedCategory;
-  formulario.appendChild(inputCategory);
-
-  const supplierData = row.querySelector('.proveedor_id');
-  const selectedSupplier = supplierData.querySelector('select').value;
-  const inputSupplier = document.createElement("input");
-  inputSupplier.type = "number";
-  inputSupplier.name = "proveedor_id";
-  inputSupplier.value = selectedSupplier;
-  formulario.appendChild(inputSupplier);
+  fillDynamicForm(row, formulario);
 
    let url = "";
-   let formElement;
+   let formData = new FormData(formulario);
   if (action === "CREATE") {
     url = "app/controllers/producto_controller.php?action=store";
-    formElement = formulario;
   } else {
     url = "app/controllers/producto_controller.php?action=update";
-    formElement = formulario;
-  }
-
-  let formData = new FormData(formElement);
-
-  // Añade el id si es una actualización
-  if (action === "UPDATE") {
     formData.append("id", id);
   }
+
+  formData.forEach((value, key) => {
+    console.log(`key: ${key}, value: ${value}`);
+  });
 
     // Aquí va el código de fetch para enviar los datos al servidor
   fetch(`${url}`, {
@@ -213,7 +173,6 @@ function removeErrorMessages(row) {
     errorRow.remove();
   }
 }
-
 
 function addErrorMessages(row, errors) {
 
@@ -304,6 +263,10 @@ function filterProducts() {
 }
 
 function cleanAndConvertToNumber(text) {
+  return parseFloat(text.replace(/[$,]/g, '')) || '';
+}
+
+function removeCurrencyFormat(text) {
   text = text.replace(/\./g, ''); // Eliminar puntos de miles
   text = text.replace(/,/g, '.'); // Cambiar comas por puntos
   text = text.replace(/[$]/g, ''); // Eliminar el signo de la moneda
@@ -316,9 +279,7 @@ function roundToMultipleOf100(value) {
 
 function calcular_precio() {
   let precio_compra_text = document.getElementById("precio_compra_nuevo").textContent;
-  let precio_compra = cleanAndConvertToNumber(precio_compra_text);
-
-  console.log(precio_compra);
+  let precio_compra = removeCurrencyFormat(precio_compra_text);
 
   if (precio_compra <= 0 || precio_compra == "") {
     document.getElementById("precio_venta_nuevo").textContent = "";
@@ -330,10 +291,6 @@ function calcular_precio() {
     let precio_mayoreo = precio_venta * 0.9;
     precio_mayoreo = roundToMultipleOf100(precio_mayoreo);
 
-    // Guarda los valores antes de darles formato
-    let precio_venta_sin_formato = precio_venta;
-    let precio_mayoreo_sin_formato = precio_mayoreo;
-
     // Dar formato a los valores
     precio_venta = formatCurrency(precio_venta);
     precio_mayoreo = formatCurrency(precio_mayoreo);
@@ -341,9 +298,6 @@ function calcular_precio() {
     // Actualizar la UI con los valores formateados
     document.getElementById("precio_venta_nuevo").textContent = precio_venta;
     document.getElementById("precio_mayoreo_nuevo").textContent = precio_mayoreo;
-
-    // Usa las variables sin formato para cualquier cálculo adicional
-    console.log(precio_venta_sin_formato, precio_mayoreo_sin_formato);
   }
 }
 
@@ -355,8 +309,26 @@ function formatCurrency(value) {
   }).format(value);
 }
 
-function formatCurrencyElement(element) {
-  const valor = cleanAndConvertToNumber(element.textContent);
+function setCaretAtEnd(element) {
+  const range = document.createRange();
+  const selection = window.getSelection();
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  element.focus();
+}
+
+function formatCurrencyElement(element, fromDatabase) {
+  let valor;
+
+  if (fromDatabase) {
+    // Usar esta cuando se cargan los datos es decir en el evento DOMContentLoaded
+    valor = cleanAndConvertToNumber(element.textContent);
+  } else {
+    // Usar este cuando se está escribiendo el texto es decir en el evento input
+    valor = removeCurrencyFormat(element.textContent);
+  }
 
   if (valor === 0 || isNaN(valor)) {
     // Si no es un número, establecer el contenido del texto a un espacio en blanco
@@ -369,26 +341,15 @@ function formatCurrencyElement(element) {
   setCaretAtEnd(element);
 }
 
-
-function setCaretAtEnd(element) {
-  const range = document.createRange();
-  const selection = window.getSelection();
-  range.selectNodeContents(element);
-  range.collapse(false);
-  selection.removeAllRanges();
-  selection.addRange(range);
-  element.focus();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   // Formatear inicialmente todos los elementos con la clase moneda
   const monedas = document.querySelectorAll(".moneda");
-  monedas.forEach(formatCurrencyElement);
+  monedas.forEach((element) => formatCurrencyElement(element, true)); // true indica que los datos provienen de la base de datos
 
   // Agregar un event listener para el elemento 'precio_compra_nuevo'
   const precioCompraNuevo = document.getElementById('precio_compra_nuevo');
   precioCompraNuevo.addEventListener('input', () => {
-    formatCurrencyElement(precioCompraNuevo);
+    formatCurrencyElement(precioCompraNuevo, false); // false indica que los datos están siendo ingresados por el usuario
     calcular_precio();
-  }); 
+  });
 });
