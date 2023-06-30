@@ -287,6 +287,10 @@ async function loadProducts() {
 
     tableBody.appendChild(newRow);
 
+    // Formatear todos los elementos con la clase moneda
+    const monedas = document.querySelectorAll(".moneda");
+    monedas.forEach((element) => formatCurrencyElement(element, true));
+
     addInputListeners();
     
   } catch (error) {
@@ -311,9 +315,9 @@ function fnCreateUpdate(action = "CREATE", id = "") {
     formData.append("id", id);
   }
 
-  formData.forEach((value, key) => {
+  /* formData.forEach((value, key) => {
     console.log(`key: ${key}, value: ${value}`);
-  });
+  }); */
 
   // Aquí va el código de fetch para enviar los datos al servidor
   fetch(`${url}`, {
@@ -616,11 +620,5 @@ function addInputListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-
   await loadProducts();
-  // Formatear inicialmente todos los elementos con la clase moneda
-  const monedas = document.querySelectorAll(".moneda");
-  monedas.forEach((element) => formatCurrencyElement(element, true));
-
-  addInputListeners();
 });
