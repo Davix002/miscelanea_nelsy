@@ -99,6 +99,12 @@ class Categoria_controller
         return $error;
     }
 
+    public function getAll() {
+        $response = [];
+        $response['data'] = $this->model->getAll();
+        echo json_encode($response);
+    }
+
     public function doAction()
     {
         $action = $_REQUEST['action'];
@@ -116,6 +122,9 @@ class Categoria_controller
             case 'destroy':
                 $this->destroy();
                 break;
+            case 'getAll':
+                $this->getAll();
+            break;
             default:
                 http_response_code(409);
                 $response['data']['error'] = "No existe el recurso que intenta consultar.";

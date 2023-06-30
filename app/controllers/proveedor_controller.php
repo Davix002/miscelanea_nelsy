@@ -101,6 +101,11 @@ class Proveedor_controller {
         return $error;
     }
     
+    public function getAll() {
+        $response = [];
+        $response['data'] = $this->model->getAll();
+        echo json_encode($response);
+    }
 
     public function doAction() {
         $action = $_REQUEST['action'];
@@ -117,6 +122,9 @@ class Proveedor_controller {
             break;
             case 'destroy':
                 $this->destroy();
+            break;
+            case 'getAll':
+                $this->getAll();
             break;
             default:
                 http_response_code(409);
