@@ -1,16 +1,13 @@
 function scrollToBottom() {
   let lastRow = document.getElementById("productRow_new");
   lastRow.scrollIntoView({ behavior: "smooth" });
-
   let inputNombreProducto = document.getElementById("nombre_producto_nuevo");
   inputNombreProducto.focus();
 }
 
 function deleteNewRow() {
   const newRow = document.getElementById("productRow_new");
-
   const dataCells = newRow.querySelectorAll(".editable");
-
   dataCells.forEach((dataCell) => {
     if (
       dataCell.classList.contains("categoria_id") ||
@@ -22,23 +19,18 @@ function deleteNewRow() {
       dataCell.textContent = "";
     }
   });
-
   removeErrorMessages(newRow);
 }
 
 function enableEditing(id) {
-  // Obtén todas las celdas de la fila por el id del producto
   const row = document.querySelector(`#productRow_${id}`);
   const dataCells = row.querySelectorAll(".editable");
-
-  //guarda los valores originales del producto y habilita la edición de los campos
   dataCells.forEach((dataCell) => {
     if (
       dataCell.classList.contains("categoria_id") ||
       dataCell.classList.contains("proveedor_id")
     ) {
       const dataSelect = dataCell.querySelector("select");
-
       dataSelect.setAttribute("data-original", dataSelect.value);
       dataSelect.removeAttribute("disabled");
     } else {
@@ -46,14 +38,11 @@ function enableEditing(id) {
       dataCell.setAttribute("contenteditable", true);
     }
   });
-
-  // Muestra el botón de guardar y esconde el de editar
   const editBtn = row.querySelector(".editBtn");
   const saveBtn = row.querySelector(".saveBtn");
   editBtn.classList.add("d-none");
   saveBtn.classList.remove("d-none");
 
-  // Muestra el botón de cancelar y esconde el de eliminar
   const deleteBtn = row.querySelector(".deleteBtn");
   const cancelBtn = row.querySelector(".cancelBtn");
   deleteBtn.classList.add("d-none");
@@ -297,6 +286,9 @@ async function loadProducts() {
     `;
 
     tableBody.appendChild(newRow);
+
+    addInputListeners();
+    
   } catch (error) {
     console.error("Error:", error);
     alert("Error al cargar los productos.");
@@ -331,8 +323,7 @@ function fnCreateUpdate(action = "CREATE", id = "") {
     .then((response) => {
       if (response.ok) {
         response.json().then(async (data) => {
-          alert(data.data);
-          //window.location.href = "productos";
+          //alert(data.data);
           await loadProducts();
         });
       } else {
@@ -412,9 +403,9 @@ function fnDelete(id) {
     })
       .then((response) => {
         if (response.ok) {
-          response.json().then((data) => {
-            alert(data.data);
-            window.location.href = "productos";
+          response.json().then(async (data) => {
+            //alert(data.data);
+            await loadProducts();
           });
         } else {
           response.json().then((data) => {
@@ -572,19 +563,15 @@ function recalcularPreciosFila(elementoPrecioCompra) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-
-  await loadProducts();
-  // Formatear inicialmente todos los elementos con la clase moneda
-  const monedas = document.querySelectorAll(".moneda");
-  monedas.forEach((element) => formatCurrencyElement(element, true));
-
+function addInputListeners() {
   // Agregar un event listener para el elemento 'precio_compra_nuevo'
   const precioCompraNuevo = document.getElementById("precio_compra_nuevo");
-  precioCompraNuevo.addEventListener("input", () => {
-    formatCurrencyElement(precioCompraNuevo, false);
-    calcular_precio();
-  });
+  if (precioCompraNuevo) {
+    precioCompraNuevo.addEventListener("input", () => {
+      formatCurrencyElement(precioCompraNuevo, false);
+      calcular_precio();
+    });
+  }
 
   // Agregar event listeners a todos los elementos con la clase 'precio_compra'
   const preciosCompra = document.querySelectorAll(".precio_compra");
@@ -605,9 +592,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Agregar un event listener para el elemento 'precio_venta_nuevo'
   const precioVentaNuevo = document.getElementById("precio_venta_nuevo");
-  precioVentaNuevo.addEventListener("input", () => {
-    formatCurrencyElement(precioVentaNuevo, false);
-  });
+  if (precioVentaNuevo) {
+    precioVentaNuevo.addEventListener("input", () => {
+      formatCurrencyElement(precioVentaNuevo, false);
+    });
+  }
 
   // Agregar event listeners a todos los elementos con la clase 'precio_mayoreo'
   const preciosMayoreo = document.querySelectorAll(".precio_mayoreo");
@@ -619,7 +608,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Agregar un event listener para el elemento 'precio_mayoreo_nuevo'
   const precioMayoreoNuevo = document.getElementById("precio_mayoreo_nuevo");
-  precioMayoreoNuevo.addEventListener("input", () => {
-    formatCurrencyElement(precioMayoreoNuevo, false);
-  });
+  if (precioMayoreoNuevo) {
+    precioMayoreoNuevo.addEventListener("input", () => {
+      formatCurrencyElement(precioMayoreoNuevo, false);
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  await loadProducts();
+  // Formatear inicialmente todos los elementos con la clase moneda
+  const monedas = document.querySelectorAll(".moneda");
+  monedas.forEach((element) => formatCurrencyElement(element, true));
+
+  addInputListeners();
 });
