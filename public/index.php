@@ -19,10 +19,22 @@
             color: #dc3545;
         }
 
-        tr:last-child td {
-            background-color: #EDECED;
-            border-color: #CCCCCC;
+        table tr td{
+            text-align: left;
+            vertical-align: middle;
         }
+
+        tr:last-child td {
+            background-color: #cde1f6;
+            border-color: #b2c6e5;
+        }
+
+        .editable-row td{
+            background-color: #cde1f6;
+            border-color: #b2c6e5;
+            border-width: 2px;
+        }
+
     </style>
 
     <title>MISCELANEA NELSY</title>

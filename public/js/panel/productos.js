@@ -24,19 +24,21 @@ function deleteNewRow() {
 
 function enableEditing(id) {
   const row = document.querySelector(`#productRow_${id}`);
+  row.classList.add("editable-row");
   const dataCells = row.querySelectorAll(".editable");
+  dataCells
   dataCells.forEach((dataCell) => {
-    if (
-      dataCell.classList.contains("categoria_id") ||
-      dataCell.classList.contains("proveedor_id")
-    ) {
-      const dataSelect = dataCell.querySelector("select");
-      dataSelect.setAttribute("data-original", dataSelect.value);
-      dataSelect.removeAttribute("disabled");
-    } else {
-      dataCell.setAttribute("data-original", dataCell.textContent);
-      dataCell.setAttribute("contenteditable", true);
-    }
+      if (
+        dataCell.classList.contains("categoria_id") ||
+        dataCell.classList.contains("proveedor_id")
+      ) {
+        const dataSelect = dataCell.querySelector("select");
+        dataSelect.setAttribute("data-original", dataSelect.value);
+        dataSelect.removeAttribute("disabled");
+      } else {
+        dataCell.setAttribute("data-original", dataCell.textContent);
+        dataCell.setAttribute("contenteditable", true);
+      }
   });
   const editBtn = row.querySelector(".editBtn");
   const saveBtn = row.querySelector(".saveBtn");
@@ -51,6 +53,7 @@ function enableEditing(id) {
 
 function fnCancel(id) {
   const row = document.querySelector(`#productRow_${id}`);
+  row.classList.remove("editable-row");
   const dataCells = row.querySelectorAll(".editable");
 
   dataCells.forEach((dataCell) => {
@@ -59,7 +62,6 @@ function fnCancel(id) {
       dataCell.classList.contains("proveedor_id")
     ) {
       const dataSelect = dataCell.querySelector("select");
-
       dataSelect.value = dataSelect.getAttribute("data-original");
       dataSelect.setAttribute("disabled", true);
     } else {
@@ -202,7 +204,7 @@ async function loadProducts() {
       let modifiedProviderOptions = providerOptions.replace(`value="${product.proveedor_id}"`, `value="${product.proveedor_id}" selected`);
 
       row.innerHTML = `
-        <td>${product.id}</td>
+        <td class="bg-white border border-secondary-subtle">${product.id}</td>
         <td class="nombre_producto editable" contenteditable="false">${product.nombre_producto}</td>
         <td class="codigo_barras editable" contenteditable="false">${product.codigo_barras}</td>
           <td class="precio_compra editable moneda" contenteditable="false">${product.precio_compra}</td>
@@ -220,7 +222,7 @@ async function loadProducts() {
               ${modifiedProviderOptions}
             </select>
           </td>
-          <td>
+          <td class="bg-white border border-secondary-subtle">
             <button type='button' onclick='enableEditing(${product.id})' class='btn btn-primary editBtn'>
               <img src='../miscelanea_nelsy/public/images/pencil.svg'>
             </button>
@@ -228,7 +230,7 @@ async function loadProducts() {
               <img src='../miscelanea_nelsy/public/images/check.svg'>
             </button>
           </td>
-          <td>
+          <td class="bg-white border border-secondary-subtle">
             <button type='button' onclick='fnDelete(${product.id})' class='btn btn-danger deleteBtn'>
               <img src='../miscelanea_nelsy/public/images/trash.svg'>
             </button>
@@ -244,7 +246,7 @@ async function loadProducts() {
     newRow.id = "productRow_new";
 
     newRow.innerHTML = `
-      <td style="text-align: left; vertical-align: middle;">+</td>
+      <td style="background-color:white;">+</td>
       <td class="nombre_producto editable p-2 border-2" id="nombre_producto_nuevo" contenteditable="true"></td>
         <td class="codigo_barras editable p-2 border-2" contenteditable="true"></td>
         <td class="precio_compra editable p-2 border-2" id='precio_compra_nuevo' contenteditable="true"></td>
@@ -253,21 +255,21 @@ async function loadProducts() {
         <td class="unidad editable p-2 border-2" contenteditable="true"></td>
         <td class="existencias editable p-2 border-2" contenteditable="true"></td>
         <td class="categoria_id editable p-2 border-2">
-            <select name="categoria_id" class="form-select border-0 w-auto ps-1 pt-1 pb-1">
+            <select name="categoria_id" class="form-select border-0 w-auto bg-transparent">
               ${categoryOptions}
             </select>
           </td>
           <td class="proveedor_id editable p-2 border-2">
-            <select name="proveedor_id" class="form-select border-0 w-auto ps-1 pt-1 pb-1">
+            <select name="proveedor_id" class="form-select border-0 w-auto  bg-transparent">
               ${providerOptions}
             </select>
           </td>
-          <td>
+          <td class="bg-white">
             <button type='button' onclick='fnCreateUpdate("CREATE", "new")' class='btn btn-success saveBtn'>
               <img src='../miscelanea_nelsy/public/images/check.svg'>
             </button>
           </td>
-          <td>
+          <td class="bg-white">
             <button type='button' onclick='deleteNewRow()' class='btn btn-dark'>
               <img src='../miscelanea_nelsy/public/images/cancel.svg'>
             </button>
