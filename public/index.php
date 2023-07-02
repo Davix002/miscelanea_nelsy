@@ -13,6 +13,9 @@
             color: #dc3545;
         }
 
+        tr:hover div {
+            background-color: white;
+        }
     </style>
 
     <title>MISCELANEA NELSY</title>

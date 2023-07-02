@@ -9,8 +9,8 @@
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
     </div>
 
-    <table class="table table-hover table-sm" id="productTable">
-        <thead>
+    <table  class="table table-hover table-sm" id="productTable">
+        <thead >
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>

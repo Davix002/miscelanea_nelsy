@@ -244,21 +244,21 @@ async function loadProducts() {
     newRow.id = "productRow_new";
 
     newRow.innerHTML = `
-      <td>+</td>
-      <td class="nombre_producto editable" id="nombre_producto_nuevo" contenteditable="true"></td>
-        <td class="codigo_barras editable" contenteditable="true"></td>
-        <td class="precio_compra editable" id='precio_compra_nuevo' contenteditable="true"></td>
-        <td class="precio_venta editable" id='precio_venta_nuevo' contenteditable="true"></td>
-        <td class="precio_mayoreo editable" id='precio_mayoreo_nuevo' contenteditable="true"></td>
-        <td class="unidad editable" contenteditable="true"></td>
-        <td class="existencias editable" contenteditable="true"></td>
-        <td class="categoria_id editable">
-            <select name="categoria_id" class="form-select border-0 w-auto">
+      <td style="text-align: left; vertical-align: middle;">+</td>
+      <td class="nombre_producto editable p-2 " id="nombre_producto_nuevo"><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="codigo_barras editable p-2" ><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="precio_compra editable p-2" id='precio_compra_nuevo'><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="precio_venta editable p-2" id='precio_venta_nuevo'><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="precio_mayoreo editable p-2" id='precio_mayoreo_nuevo'><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="unidad editable p-2"><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="existencias editable p-2"><div class="border border-secondary border-2 p-1 rounded" contenteditable="true"></div></td>
+        <td class="categoria_id editable p-2">
+            <select name="categoria_id" class="form-select border border-secondary border-2 w-auto ps-1 pt-1 pb-1">
               ${categoryOptions}
             </select>
           </td>
-          <td class="proveedor_id editable">
-            <select name="proveedor_id" class="form-select border-0 w-auto">
+          <td class="proveedor_id editable p-2">
+            <select name="proveedor_id" class="form-select border border-secondary border-2 w-auto ps-1 pt-1 pb-1">
               ${providerOptions}
             </select>
           </td>
