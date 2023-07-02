@@ -247,19 +247,19 @@ async function loadProducts() {
 
     newRow.innerHTML = `
       <td style="background-color:white;">+</td>
-      <td class="nombre_producto editable p-2 border-2" id="nombre_producto_nuevo" contenteditable="true"></td>
-        <td class="codigo_barras editable p-2 border-2" contenteditable="true"></td>
-        <td class="precio_compra editable p-2 border-2" id='precio_compra_nuevo' contenteditable="true"></td>
-        <td class="precio_venta editable p-2 border-2" id='precio_venta_nuevo' contenteditable="true"></td>
-        <td class="precio_mayoreo editable p-2 border-2" id='precio_mayoreo_nuevo' contenteditable="true"></td>
-        <td class="unidad editable p-2 border-2" contenteditable="true"></td>
-        <td class="existencias editable p-2 border-2" contenteditable="true"></td>
-        <td class="categoria_id editable p-2 border-2">
+      <td class="nombre_producto editable border-2" id="nombre_producto_nuevo" contenteditable="true"></td>
+        <td class="codigo_barras editable border-2" contenteditable="true"></td>
+        <td class="precio_compra editable border-2" id='precio_compra_nuevo' contenteditable="true"></td>
+        <td class="precio_venta editable border-2" id='precio_venta_nuevo' contenteditable="true"></td>
+        <td class="precio_mayoreo editable border-2" id='precio_mayoreo_nuevo' contenteditable="true"></td>
+        <td class="unidad editable border-2" contenteditable="true"></td>
+        <td class="existencias editable border-2" contenteditable="true"></td>
+        <td class="categoria_id editable border-2">
             <select name="categoria_id" class="form-select border-0 w-auto bg-transparent">
               ${categoryOptions}
             </select>
           </td>
-          <td class="proveedor_id editable p-2 border-2">
+          <td class="proveedor_id editable border-2">
             <select name="proveedor_id" class="form-select border-0 w-auto  bg-transparent">
               ${providerOptions}
             </select>
@@ -281,10 +281,31 @@ async function loadProducts() {
     const monedas = document.querySelectorAll(".moneda");
     monedas.forEach((element) => formatCurrencyElement(element, true));
     addInputListeners();
+    addValidationListeners();
   } catch (error) {
     console.error("Error:", error);
     alert("Error al cargar los productos.");
   }
+}
+
+function addValidationListeners() {
+  // Selector para los elementos td que deben contener solo números
+  const numericTds = document.querySelectorAll(".codigo_barras, .existencias");
+  numericTds.forEach(td => {
+    td.addEventListener("input", function (event) {
+      // Reemplaza cualquier caracter que no sea un dígito con una cadena vacía
+      this.textContent = this.textContent.replace(/[^0-9]/g, "");
+    });
+  });
+
+  // Selector para los elementos td que deben contener solo letras
+  const letterTds = document.querySelectorAll(".unidad");
+  letterTds.forEach(td => {
+    td.addEventListener("input", function (event) {
+      // Reemplaza cualquier caracter que no sea una letra con una cadena vacía
+      this.textContent = this.textContent.replace(/[^a-zA-Z\s]/g, "");
+    });
+  });
 }
 
 function fnCreateUpdate(action = "CREATE", id = "") {
