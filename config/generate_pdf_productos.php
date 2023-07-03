@@ -1,4 +1,10 @@
 <?php
+
+//Codigo para depurar errores
+/* ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL); */
+
 require_once __DIR__ . '/../dompdf/autoload.inc.php';
 require_once __DIR__ . "/../app/models/Producto.php";
 

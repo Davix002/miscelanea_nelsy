@@ -417,6 +417,10 @@ function printProductsToPDF() {
   window.open("config/generate_pdf_productos.php", "_blank");
 }
 
+function generateProductsExcel() {
+  window.open("config/generate_excel_productos.php", "_blank");
+}
+
 function normalizeText(text) {
   return text
     .normalize("NFD")

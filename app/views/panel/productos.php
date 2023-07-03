@@ -2,8 +2,11 @@
     <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="scrollToBottom()">
         Nuevo producto
     </button>
-    <button type="button" class="col-3 btn btn-secondary my-3" onclick="printProductsToPDF()">
+    <button type="button" class="col-3 btn btn-secondary me-2 my-3" onclick="printProductsToPDF()">
         Imprimir lista de productos en PDF
+    </button>
+    <button type="button" class="col-3 btn btn-success my-3" onclick="generateProductsExcel()">
+        Generar archivo excel de productos
     </button>
     <div class="col-4 my-3">
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
