@@ -25,14 +25,15 @@
         }
 
         tr:last-child td {
-            background-color: #cde1f6;
-            border-color: #b2c6e5;
+            border-color:#333;
+            border-width: 2px;
+            box-shadow: inset 2px 2px 2px 0 gray;
         }
 
         .editable-row td{
-            background-color: #cde1f6;
-            border-color: #b2c6e5;
+            border-color:#333;
             border-width: 2px;
+            box-shadow: inset 2px 2px 2px 0 gray;
         }
 
     </style>

@@ -204,7 +204,7 @@ async function loadProducts() {
       let modifiedProviderOptions = providerOptions.replace(`value="${product.proveedor_id}"`, `value="${product.proveedor_id}" selected`);
 
       row.innerHTML = `
-        <td class="bg-white border border-secondary-subtle">${product.id}</td>
+        <td class="bg-white border border-secondary-subtle shadow-none">${product.id}</td>
         <td class="nombre_producto editable" contenteditable="false">${product.nombre_producto}</td>
         <td class="codigo_barras editable" contenteditable="false">${product.codigo_barras}</td>
           <td class="precio_compra editable moneda" contenteditable="false">${product.precio_compra}</td>
@@ -213,16 +213,16 @@ async function loadProducts() {
           <td class="unidad editable" contenteditable="false">${product.unidad}</td>
           <td class="existencias editable" contenteditable="false">${product.existencias}</td>
           <td class="categoria_id editable">
-            <select name="categoria_id" class="form-select border-0 bg-transparent w-auto" disabled>
+            <select name="categoria_id" class="form-select shadow-none border-0 bg-transparent w-auto" disabled>
               ${modifiedCategoryOptions}
             </select>
           </td>
           <td class="proveedor_id editable">
-            <select name="proveedor_id" class="form-select border-0 bg-transparent w-auto" disabled>
+            <select name="proveedor_id" class="form-select shadow-none border-0 bg-transparent w-auto" disabled>
               ${modifiedProviderOptions}
             </select>
           </td>
-          <td class="bg-white border border-secondary-subtle">
+          <td class="bg-white border border-secondary-subtle shadow-none">
             <button type='button' onclick='enableEditing(${product.id})' class='btn btn-primary editBtn'>
               <img src='../miscelanea_nelsy/public/images/pencil.svg'>
             </button>
@@ -230,7 +230,7 @@ async function loadProducts() {
               <img src='../miscelanea_nelsy/public/images/check.svg'>
             </button>
           </td>
-          <td class="bg-white border border-secondary-subtle">
+          <td class="bg-white border border-secondary-subtle shadow-none">
             <button type='button' onclick='fnDelete(${product.id})' class='btn btn-danger deleteBtn'>
               <img src='../miscelanea_nelsy/public/images/trash.svg'>
             </button>
@@ -246,30 +246,30 @@ async function loadProducts() {
     newRow.id = "productRow_new";
 
     newRow.innerHTML = `
-      <td style="background-color:white;">+</td>
-      <td class="nombre_producto editable border-2" id="nombre_producto_nuevo" contenteditable="true"></td>
-        <td class="codigo_barras editable border-2" contenteditable="true"></td>
-        <td class="precio_compra editable border-2" id='precio_compra_nuevo' contenteditable="true"></td>
-        <td class="precio_venta editable border-2" id='precio_venta_nuevo' contenteditable="true"></td>
-        <td class="precio_mayoreo editable border-2" id='precio_mayoreo_nuevo' contenteditable="true"></td>
-        <td class="unidad editable border-2" contenteditable="true"></td>
-        <td class="existencias editable border-2" contenteditable="true"></td>
-        <td class="categoria_id editable border-2">
-            <select name="categoria_id" class="form-select border-0 w-auto bg-transparent">
+      <td class="bg-white shadow-none border border-secondary-subtle">+</td>
+      <td class="nombre_producto editable" id="nombre_producto_nuevo" contenteditable="true"></td>
+        <td class="codigo_barras editable" contenteditable="true"></td>
+        <td class="precio_compra editable" id='precio_compra_nuevo' contenteditable="true"></td>
+        <td class="precio_venta editable" id='precio_venta_nuevo' contenteditable="true"></td>
+        <td class="precio_mayoreo editable" id='precio_mayoreo_nuevo' contenteditable="true"></td>
+        <td class="unidad editable" contenteditable="true"></td>
+        <td class="existencias editable" contenteditable="true"></td>
+        <td class="categoria_id editable">
+            <select name="categoria_id" class="form-select shadow-none border-0 w-auto bg-transparent">
               ${categoryOptions}
             </select>
           </td>
-          <td class="proveedor_id editable border-2">
-            <select name="proveedor_id" class="form-select border-0 w-auto  bg-transparent">
+          <td class="proveedor_id editable">
+            <select name="proveedor_id" class="form-select shadow-none border-0 w-auto  bg-transparent">
               ${providerOptions}
             </select>
           </td>
-          <td class="bg-white">
+          <td class="bg-white shadow-none border border-secondary-subtle">
             <button type='button' onclick='fnCreateUpdate("CREATE", "new")' class='btn btn-success saveBtn'>
               <img src='../miscelanea_nelsy/public/images/check.svg'>
             </button>
           </td>
-          <td class="bg-white">
+          <td class="bg-white shadow-none border border-secondary-subtle">
             <button type='button' onclick='deleteNewRow()' class='btn btn-dark'>
               <img src='../miscelanea_nelsy/public/images/cancel.svg'>
             </button>
@@ -585,4 +585,5 @@ function addInputListeners() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadProducts();
+  scrollToBottom();
 });
