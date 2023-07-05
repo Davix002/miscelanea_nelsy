@@ -48,6 +48,26 @@ class Producto
         return $statement->fetch(PDO::FETCH_ASSOC)['nombre_proveedor'];
     }
 
+    public function getCategoriaIdPorNombre($nombreCategoria)
+    {
+        $nombreCategoria = mb_strtolower($nombreCategoria, 'UTF-8');
+        $statement = $this->pdo->prepare("SELECT id FROM categorias WHERE LOWER(nombre_categoria) = LOWER(?)");
+        $statement->execute([$nombreCategoria]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['id'] : null;
+    }
+
+    public function getProveedorIdPorNombre($nombreProveedor)
+    {
+        $nombreProveedor = mb_strtolower($nombreProveedor, 'UTF-8');
+        $statement = $this->pdo->prepare("SELECT id FROM proveedores WHERE LOWER(nombre_proveedor) = LOWER(?)");
+        $statement->execute([$nombreProveedor]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['id'] : null;
+    }
+
+
+
     public function create($product_data)
     {
         $statement = $this->pdo->prepare("INSERT INTO productos (nombre_producto, codigo_barras, precio_compra, precio_venta, precio_mayoreo, unidad, existencias, proveedor_id, categoria_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");

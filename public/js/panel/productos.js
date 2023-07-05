@@ -336,6 +336,7 @@ function fnCreateUpdate(action = "CREATE", id = "") {
         response.json().then(async (data) => {
           //alert(data.data);
           await loadProducts();
+          scrollToBottom();
         });
       } else {
         response.json().then((data) => {
@@ -584,6 +585,33 @@ function addInputListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  await loadProducts();
+  scrollToBottom();
+});
+
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  var formData = new FormData();
+  formData.append("excelFile", document.getElementById('excelFile').files[0]);
+  
+  fetch("app/controllers/producto_controller.php?action=upload", {
+      method: "POST",
+      body: formData
+  }).then(response => {
+      console.log(response); // Imprime la respuesta HTTP completa
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  }).then(data => {
+      console.log(data);
+      alert("Archivo procesado.");
+  }).catch(err => {
+      console.error(err);
+      alert("Error procesando el archivo.");
+  });
+
   await loadProducts();
   scrollToBottom();
 });

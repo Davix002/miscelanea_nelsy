@@ -11,9 +11,13 @@
     <div class="col-4 my-3">
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
     </div>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="excelFile" id="excelFile" accept=".xlsx" />
+        <button type="submit">Subir Archivo</button>
+    </form>
 
-    <table  class="table table-hover table-sm" id="productTable">
-        <thead >
+    <table class="table table-hover table-sm" id="productTable">
+        <thead>
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>
@@ -50,6 +54,6 @@
         </tfoot>
 
     </table>
-    
+
     <script src="public/js/panel/productos.js"></script>
 </div>
