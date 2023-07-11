@@ -286,6 +286,8 @@ async function loadProducts() {
     console.error("Error:", error);
     alert("Error al cargar los productos.");
   }
+
+  scrollToBottom();
 }
 
 function addValidationListeners() {
@@ -336,7 +338,6 @@ function fnCreateUpdate(action = "CREATE", id = "") {
         response.json().then(async (data) => {
           //alert(data.data);
           await loadProducts();
-          scrollToBottom();
         });
       } else {
         response.json().then((data) => {
@@ -586,7 +587,6 @@ function addInputListeners() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadProducts();
-  scrollToBottom();
 });
 
 document.getElementById('uploadForm').addEventListener('submit', async function(e) {
@@ -599,19 +599,18 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
       method: "POST",
       body: formData
   }).then(response => {
-      console.log(response); // Imprime la respuesta HTTP completa
       if (!response.ok) {
           throw new Error('Network response was not ok');
       }
       return response.json();
-  }).then(data => {
-      console.log(data);
-      alert("Archivo procesado.");
+  }).then(async data => {
+      await loadProducts();
   }).catch(err => {
       console.error(err);
       alert("Error procesando el archivo.");
+  }).finally(() => {
+      // Reset the form after file has been submitted
+      document.getElementById('uploadForm').reset();
   });
-
-  await loadProducts();
-  scrollToBottom();
 });
+

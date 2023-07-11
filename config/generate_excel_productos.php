@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../app/models/Producto.php";
-require_once __DIR__ . '/../vendor/autoload.php'; // Asegúrate de apuntar a la ubicación correcta del autoload de composer.
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -13,30 +13,28 @@ $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
 // Configura los encabezados de las columnas
-$sheet->setCellValue('A1', 'Id');
-$sheet->setCellValue('B1', 'Nombre');
-$sheet->setCellValue('C1', 'Código de barras');
-$sheet->setCellValue('D1', 'Precio compra');
-$sheet->setCellValue('E1', 'Precio venta');
-$sheet->setCellValue('F1', 'Precio mayoreo');
-$sheet->setCellValue('G1', 'Unidad');
-$sheet->setCellValue('H1', 'Existencias');
-$sheet->setCellValue('I1', 'Categoria');
-$sheet->setCellValue('J1', 'Proveedor');
+$sheet->setCellValue('A1', 'Nombre');
+$sheet->setCellValue('B1', 'Código de barras');
+$sheet->setCellValue('C1', 'Precio compra');
+$sheet->setCellValue('D1', 'Precio venta');
+$sheet->setCellValue('E1', 'Precio mayoreo');
+$sheet->setCellValue('F1', 'Unidad');
+$sheet->setCellValue('G1', 'Existencias');
+$sheet->setCellValue('H1', 'Categoria');
+$sheet->setCellValue('I1', 'Proveedor');
 
 // Inserta los datos en las filas siguientes
 $row = 2;
 foreach ($productos as $producto) {
-    $sheet->setCellValue('A' . $row, $producto['id']);
-    $sheet->setCellValue('B' . $row, $producto['nombre_producto']);
-    $sheet->setCellValue('C' . $row, $producto['codigo_barras']);
-    $sheet->setCellValue('D' . $row, $producto['precio_compra']);
-    $sheet->setCellValue('E' . $row, $producto['precio_venta']);
-    $sheet->setCellValue('F' . $row, $producto['precio_mayoreo']);
-    $sheet->setCellValue('G' . $row, $producto['unidad']);
-    $sheet->setCellValue('H' . $row, $producto['existencias']);
-    $sheet->setCellValue('I' . $row, $obj_producto->getNombreCategoria($producto['categoria_id']));
-    $sheet->setCellValue('J' . $row, $obj_producto->getNombreProveedor($producto['proveedor_id']));
+    $sheet->setCellValue('A' . $row, $producto['nombre_producto']);
+    $sheet->setCellValue('B' . $row, $producto['codigo_barras']);
+    $sheet->setCellValue('C' . $row, $producto['precio_compra']);
+    $sheet->setCellValue('D' . $row, $producto['precio_venta']);
+    $sheet->setCellValue('E' . $row, $producto['precio_mayoreo']);
+    $sheet->setCellValue('F' . $row, $producto['unidad']);
+    $sheet->setCellValue('G' . $row, $producto['existencias']);
+    $sheet->setCellValue('H' . $row, $obj_producto->getNombreCategoria($producto['categoria_id']));
+    $sheet->setCellValue('I' . $row, $obj_producto->getNombreProveedor($producto['proveedor_id']));
     $row++;
 }
 

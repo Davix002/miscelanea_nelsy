@@ -153,31 +153,29 @@ class Producto_controller
                     if ($index == 0) continue; // Ignorar encabezados
 
                     // Obtener los IDs de categoria y proveedor a partir de sus nombres
-                    $categoriaId = $this->model->getCategoriaIdPorNombre($row[8]);
-                    $proveedorId = $this->model->getProveedorIdPorNombre($row[9]);
+                    $categoriaId = $this->model->getCategoriaIdPorNombre($row[7]);
+                    $proveedorId = $this->model->getProveedorIdPorNombre($row[8]);
 
                     $data = [
-                        'id' => $row[0], // Asumiendo que el ID está en la primera columna
-                        'nombre_producto' => $row[1],
-                        'codigo_barras' => $row[2],
-                        'precio_compra' => $row[3],
-                        'precio_venta' => $row[4],
-                        'precio_mayoreo' => $row[5],
-                        'unidad' => $row[6],
-                        'existencias' => $row[7],
+                        'nombre_producto' => $row[0],
+                        'codigo_barras' => $row[1],
+                        'precio_compra' => $row[2],
+                        'precio_venta' => $row[3],
+                        'precio_mayoreo' => $row[4],
+                        'unidad' => $row[5],
+                        'existencias' => $row[6],
                         'categoria_id' => $categoriaId,
                         'proveedor_id' => $proveedorId
                     ];
 
                     // Verificar si el producto existe
-                    $existingProduct = $this->model->getById($data['id']);
+                    $existingProduct = $this->model->getByBarcode($data['codigo_barras']);
 
                     // Si el producto existe, actualizarlo. De lo contrario, crear uno nuevo.
                     if ($existingProduct) {
+                        $data['id'] = $existingProduct['id'];  // Asigna el id del producto existente a $data
                         $this->model->update($data);
                     } else {
-                        // Eliminar la clave 'id' porque no es necesaria para crear un nuevo producto
-                        unset($data['id']);
                         $this->model->create($data);
                     }
                 }

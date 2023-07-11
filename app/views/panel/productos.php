@@ -8,13 +8,17 @@
     <button type="button" class="col-2 btn btn-success my-3" onclick="generateProductsExcel()">
         Generar excel
     </button>
-    <div class="col-4 my-3">
+    <form id="uploadForm" enctype="multipart/form-data" class="col-5 my-3">
+        <div class="input-group">
+            <input type="file" class="form-control" name="excelFile" id="excelFile" accept=".xlsx">
+            <button class="btn btn-success" type="submit">Subir archivo excel</button>
+        </div>
+    </form>
+    <div class="col-4 mb-3 ps-0">
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
     </div>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="excelFile" id="excelFile" accept=".xlsx" />
-        <button type="submit">Subir Archivo</button>
-    </form>
+    
+
 
     <table class="table table-hover table-sm" id="productTable">
         <thead>

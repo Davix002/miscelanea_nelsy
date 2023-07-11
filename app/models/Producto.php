@@ -34,6 +34,13 @@ class Producto
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getByBarcode($codigo_barras)
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM productos WHERE codigo_barras = ?");
+        $statement->execute([$codigo_barras]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getNombreCategoria($id)
     {
         $statement = $this->pdo->prepare("SELECT nombre_categoria FROM categorias WHERE id = ?");
