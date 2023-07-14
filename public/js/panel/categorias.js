@@ -26,6 +26,10 @@ function fnDelete(id) {
   function printCategoriesToPDF() {
     window.open("config/generate_pdf_categorias.php", "_blank");
   }
+
+  function generateCategoriasExcel() {
+    window.open("config/generate_excel_categorias.php", "_blank");
+  }
   
   function normalizeText(text) {
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -111,8 +115,6 @@ function fnDelete(id) {
     }
     scrollToBottom();
   }
-  
-  document.addEventListener("DOMContentLoaded", loadCategorias);
   
   function fnCreateUpdate(action = "CREATE", id = "") {
     const row = document.querySelector(`#categoriaRow_${id}`);
@@ -273,4 +275,6 @@ function fnDelete(id) {
     selection.addRange(range);
     element.focus();
   }
+
+  document.addEventListener("DOMContentLoaded", loadCategorias);
   

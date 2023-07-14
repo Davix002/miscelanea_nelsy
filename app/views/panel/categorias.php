@@ -1,13 +1,13 @@
 <div class="row">
-    <!-- Button trigger modal -->
     <button type="button" class="col-2 btn btn-primary me-2 my-3" onclick="scrollToBottom()">
         Nueva categoría
     </button>
-
-    <button type="button" class="col-4 btn btn-secondary my-3" onclick="printCategoriesToPDF()">
-        Imprimir lista de categorías en PDF
+    <button type="button" class="col-2 btn btn-secondary me-2 my-3" onclick="printCategoriesToPDF()">
+        Generar PDF
     </button>
-
+    <button type="button" class="col-2 btn btn-success my-3" onclick="generateCategoriasExcel()">
+        Generar excel
+    </button>
     <div class="col-4 my-3">
         <input type="search" class="form-control" id="searchCategorie" placeholder="Buscar categoría" onkeyup="filterCategories()">
     </div>

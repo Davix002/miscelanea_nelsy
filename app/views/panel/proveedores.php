@@ -1,13 +1,13 @@
 <div class="row">
-    <!-- Button trigger modal -->
     <button type="button" class="col-2 btn btn-primary me-2 my-3" onclick="scrollToBottom()">
         Nuevo proveedor
     </button>
-
-    <button type="button" class="col-4 btn btn-secondary my-3" onclick="printProveedoresToPDF()">
-        Imprimir lista de proveedores en PDF
+    <button type="button" class="col-2 btn btn-secondary me-2 my-3" onclick="printProveedoresToPDF()">
+        Generar PDF
     </button>
-
+    <button type="button" class="col-2 btn btn-success my-3" onclick="generateProveedoresExcel()">
+        Generar excel
+    </button>
     <div class="col-4 my-3">
         <input type="search" class="form-control" id="searchProveedor" placeholder="Buscar proveedor" onkeyup="filterProveedores()">
     </div>

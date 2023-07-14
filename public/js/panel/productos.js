@@ -1,185 +1,58 @@
-function scrollToBottom() {
-  let lastRow = document.getElementById("productRow_new");
-  lastRow.scrollIntoView({ behavior: "smooth" });
-  let inputNombreProducto = document.getElementById("nombre_producto_nuevo");
-  inputNombreProducto.focus();
-}
+function fnDelete(id) {
+  if (confirm("¿Está seguro de desea eliminar el registro?")) {
+    const Form_data = new FormData();
+    Form_data.append("id", id);
 
-function deleteNewRow() {
-  const newRow = document.getElementById("productRow_new");
-  const dataCells = newRow.querySelectorAll(".editable");
-  dataCells.forEach((dataCell) => {
-    if (
-      dataCell.classList.contains("categoria_id") ||
-      dataCell.classList.contains("proveedor_id")
-    ) {
-      const dataSelect = dataCell.querySelector("select");
-      dataSelect.value = "";
-    } else {
-      dataCell.textContent = "";
-    }
-  });
-  removeErrorMessages(newRow);
-}
-
-function enableEditing(id) {
-  const row = document.querySelector(`#productRow_${id}`);
-  row.classList.add("editable-row");
-  const dataCells = row.querySelectorAll(".editable");
-  dataCells
-  dataCells.forEach((dataCell) => {
-      if (
-        dataCell.classList.contains("categoria_id") ||
-        dataCell.classList.contains("proveedor_id")
-      ) {
-        const dataSelect = dataCell.querySelector("select");
-        dataSelect.setAttribute("data-original", dataSelect.value);
-        dataSelect.removeAttribute("disabled");
-      } else {
-        dataCell.setAttribute("data-original", dataCell.textContent);
-        dataCell.setAttribute("contenteditable", true);
-      }
-  });
-  const editBtn = row.querySelector(".editBtn");
-  const saveBtn = row.querySelector(".saveBtn");
-  editBtn.classList.add("d-none");
-  saveBtn.classList.remove("d-none");
-
-  const deleteBtn = row.querySelector(".deleteBtn");
-  const cancelBtn = row.querySelector(".cancelBtn");
-  deleteBtn.classList.add("d-none");
-  cancelBtn.classList.remove("d-none");
-}
-
-function fnCancel(id) {
-  const row = document.querySelector(`#productRow_${id}`);
-  row.classList.remove("editable-row");
-  const dataCells = row.querySelectorAll(".editable");
-
-  dataCells.forEach((dataCell) => {
-    if (
-      dataCell.classList.contains("categoria_id") ||
-      dataCell.classList.contains("proveedor_id")
-    ) {
-      const dataSelect = dataCell.querySelector("select");
-      dataSelect.value = dataSelect.getAttribute("data-original");
-      dataSelect.setAttribute("disabled", true);
-    } else {
-      dataCell.textContent = dataCell.getAttribute("data-original");
-      dataCell.setAttribute("contenteditable", false);
-    }
-  });
-
-  const editBtn = row.querySelector(".editBtn");
-  const saveBtn = row.querySelector(".saveBtn");
-  editBtn.classList.remove("d-none");
-  saveBtn.classList.add("d-none");
-
-  const deleteBtn = row.querySelector(".deleteBtn");
-  const cancelBtn = row.querySelector(".cancelBtn");
-  deleteBtn.classList.remove("d-none");
-  cancelBtn.classList.add("d-none");
-
-  removeErrorMessages(row);
-}
-
-function createInputAndAppendToForm(form, type, name, value) {
-  const input = document.createElement("input");
-  input.type = type;
-  input.name = name;
-  input.value = value;
-  form.appendChild(input);
-}
-
-function getElementValueFromRow(row, className, isSelect = false) {
-  const elementData = row.querySelector(`.${className}`);
-  if (isSelect) {
-    return elementData.querySelector("select").value;
+    fetch(`app/controllers/producto_controller.php?action=destroy`, {
+      method: "POST",
+      body: Form_data,
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.json().then(async (data) => {
+            //alert(data.data);
+            await loadProducts();
+          });
+        } else {
+          response.json().then((data) => {
+            alert(data.data.error);
+          });
+        }
+      })
+      .catch(function (error) {
+        alert("Error en el sistema.");
+      });
   }
-  return elementData.textContent;
 }
 
-function fillDynamicForm(row, formulario) {
-  createInputAndAppendToForm(
-    formulario,
-    "text",
-    "nombre_producto",
-    getElementValueFromRow(row, "nombre_producto")
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "text",
-    "codigo_barras",
-    getElementValueFromRow(row, "codigo_barras")
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "precio_compra",
-    removeCurrencyFormat(getElementValueFromRow(row, "precio_compra"))
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "precio_venta",
-    removeCurrencyFormat(getElementValueFromRow(row, "precio_venta"))
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "precio_mayoreo",
-    removeCurrencyFormat(getElementValueFromRow(row, "precio_mayoreo"))
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "text",
-    "unidad",
-    getElementValueFromRow(row, "unidad")
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "existencias",
-    getElementValueFromRow(row, "existencias")
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "categoria_id",
-    getElementValueFromRow(row, "categoria_id", true)
-  );
-  createInputAndAppendToForm(
-    formulario,
-    "number",
-    "proveedor_id",
-    getElementValueFromRow(row, "proveedor_id", true)
-  );
+function printProductsToPDF() {
+  window.open("config/generate_pdf_productos.php", "_blank");
 }
 
-async function loadCategories() {
-  const response = await fetch(
-    "app/controllers/categoria_controller.php?action=getAll"
-  );
-  const categoriesResponse = await response.json();
-  const categories = categoriesResponse.data;
-  let options = '<option value=""></option>';
-  categories.forEach((category) => {
-    options += `<option value="${category.id}">${category.nombre_categoria}</option>`;
-  });
-  return options;
+function normalizeText(text) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 }
 
-async function loadProviders() {
-  const response = await fetch(
-    "app/controllers/proveedor_controller.php?action=getAll"
-  );
-  const providersResponse = await response.json();
-  const providers = providersResponse.data;
-  let options = '<option value=""></option>';
-  providers.forEach((provider) => {
-    options += `<option value="${provider.id}">${provider.nombre_proveedor}</option>`;
-  });
-  return options;
+function filterProducts() {
+  const input = document.getElementById("searchProduct");
+  const filter = normalizeText(input.value);
+  const table = document.getElementById("productTable");
+  const rows = table.getElementsByTagName("tr");
+
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    if (cells.length > 0) {
+      const productName = cells[1].textContent || cells[1].innerText;
+      if (normalizeText(productName).indexOf(filter) > -1) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = "none";
+      }
+    }
+  }
 }
 
 async function loadProducts() {
@@ -290,26 +163,6 @@ async function loadProducts() {
   scrollToBottom();
 }
 
-function addValidationListeners() {
-  // Selector para los elementos td que deben contener solo números
-  const numericTds = document.querySelectorAll(".codigo_barras, .existencias");
-  numericTds.forEach(td => {
-    td.addEventListener("input", function (event) {
-      // Reemplaza cualquier caracter que no sea un dígito con una cadena vacía
-      this.textContent = this.textContent.replace(/[^0-9]/g, "");
-    });
-  });
-
-  // Selector para los elementos td que deben contener solo letras
-  const letterTds = document.querySelectorAll(".unidad");
-  letterTds.forEach(td => {
-    td.addEventListener("input", function (event) {
-      // Reemplaza cualquier caracter que no sea una letra con una cadena vacía
-      this.textContent = this.textContent.replace(/[^a-zA-Z\s]/g, "");
-    });
-  });
-}
-
 function fnCreateUpdate(action = "CREATE", id = "") {
   const row = document.querySelector(`#productRow_${id}`);
   const formulario = document.createElement("form");
@@ -353,6 +206,79 @@ function fnCreateUpdate(action = "CREATE", id = "") {
     });
 }
 
+function createInputAndAppendToForm(form, type, name, value) {
+  const input = document.createElement("input");
+  input.type = type;
+  input.name = name;
+  input.value = value;
+  form.appendChild(input);
+}
+
+function fillDynamicForm(row, formulario) {
+  createInputAndAppendToForm(
+    formulario,
+    "text",
+    "nombre_producto",
+    getElementValueFromRow(row, "nombre_producto")
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "text",
+    "codigo_barras",
+    getElementValueFromRow(row, "codigo_barras")
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "precio_compra",
+    removeCurrencyFormat(getElementValueFromRow(row, "precio_compra"))
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "precio_venta",
+    removeCurrencyFormat(getElementValueFromRow(row, "precio_venta"))
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "precio_mayoreo",
+    removeCurrencyFormat(getElementValueFromRow(row, "precio_mayoreo"))
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "text",
+    "unidad",
+    getElementValueFromRow(row, "unidad")
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "existencias",
+    getElementValueFromRow(row, "existencias")
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "categoria_id",
+    getElementValueFromRow(row, "categoria_id", true)
+  );
+  createInputAndAppendToForm(
+    formulario,
+    "number",
+    "proveedor_id",
+    getElementValueFromRow(row, "proveedor_id", true)
+  );
+}
+
+function getElementValueFromRow(row, className, isSelect = false) {
+  const elementData = row.querySelector(`.${className}`);
+  if (isSelect) {
+    return elementData.querySelector("select").value;
+  }
+  return elementData.textContent;
+}
+
 function removeErrorMessages(row) {
   const errorRow = row.nextElementSibling;
   if (errorRow && errorRow.querySelector(".error-message")) {
@@ -388,69 +314,89 @@ function addErrorMessages(row, errors) {
   row.insertAdjacentElement("afterend", tableRow);
 }
 
-function fnDelete(id) {
-  if (confirm("¿Está seguro de desea eliminar el registro?")) {
-    const Form_data = new FormData();
-    Form_data.append("id", id);
-
-    fetch(`app/controllers/producto_controller.php?action=destroy`, {
-      method: "POST",
-      body: Form_data,
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then(async (data) => {
-            //alert(data.data);
-            await loadProducts();
-          });
-        } else {
-          response.json().then((data) => {
-            alert(data.data.error);
-          });
-        }
-      })
-      .catch(function (error) {
-        alert("Error en el sistema.");
-      });
-  }
-}
-
-function printProductsToPDF() {
-  window.open("config/generate_pdf_productos.php", "_blank");
-}
-
-function generateProductsExcel() {
-  window.open("config/generate_excel_productos.php", "_blank");
-}
-
-function normalizeText(text) {
-  return text
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-}
-
-function filterProducts() {
-  const input = document.getElementById("searchProduct");
-  const filter = normalizeText(input.value);
-  const table = document.getElementById("productTable");
-  const rows = table.getElementsByTagName("tr");
-
-  for (let i = 0; i < rows.length; i++) {
-    const cells = rows[i].getElementsByTagName("td");
-    if (cells.length > 0) {
-      const productName = cells[1].textContent || cells[1].innerText;
-      if (normalizeText(productName).indexOf(filter) > -1) {
-        rows[i].style.display = "";
+function enableEditing(id) {
+  const row = document.querySelector(`#productRow_${id}`);
+  row.classList.add("editable-row");
+  const dataCells = row.querySelectorAll(".editable");
+  dataCells
+  dataCells.forEach((dataCell) => {
+      if (
+        dataCell.classList.contains("categoria_id") ||
+        dataCell.classList.contains("proveedor_id")
+      ) {
+        const dataSelect = dataCell.querySelector("select");
+        dataSelect.setAttribute("data-original", dataSelect.value);
+        dataSelect.removeAttribute("disabled");
       } else {
-        rows[i].style.display = "none";
+        dataCell.setAttribute("data-original", dataCell.textContent);
+        dataCell.setAttribute("contenteditable", true);
       }
-    }
-  }
+  });
+  const editBtn = row.querySelector(".editBtn");
+  const saveBtn = row.querySelector(".saveBtn");
+  editBtn.classList.add("d-none");
+  saveBtn.classList.remove("d-none");
+
+  const deleteBtn = row.querySelector(".deleteBtn");
+  const cancelBtn = row.querySelector(".cancelBtn");
+  deleteBtn.classList.add("d-none");
+  cancelBtn.classList.remove("d-none");
 }
 
-function roundToMultipleOf100(value) {
-  return Math.round(value / 100) * 100;
+function fnCancel(id) {
+  const row = document.querySelector(`#productRow_${id}`);
+  row.classList.remove("editable-row");
+  const dataCells = row.querySelectorAll(".editable");
+
+  dataCells.forEach((dataCell) => {
+    if (
+      dataCell.classList.contains("categoria_id") ||
+      dataCell.classList.contains("proveedor_id")
+    ) {
+      const dataSelect = dataCell.querySelector("select");
+      dataSelect.value = dataSelect.getAttribute("data-original");
+      dataSelect.setAttribute("disabled", true);
+    } else {
+      dataCell.textContent = dataCell.getAttribute("data-original");
+      dataCell.setAttribute("contenteditable", false);
+    }
+  });
+
+  const editBtn = row.querySelector(".editBtn");
+  const saveBtn = row.querySelector(".saveBtn");
+  editBtn.classList.remove("d-none");
+  saveBtn.classList.add("d-none");
+
+  const deleteBtn = row.querySelector(".deleteBtn");
+  const cancelBtn = row.querySelector(".cancelBtn");
+  deleteBtn.classList.remove("d-none");
+  cancelBtn.classList.add("d-none");
+
+  removeErrorMessages(row);
+}
+
+function scrollToBottom() {
+  let lastRow = document.getElementById("productRow_new");
+  lastRow.scrollIntoView({ behavior: "smooth" });
+  let inputNombreProducto = document.getElementById("nombre_producto_nuevo");
+  inputNombreProducto.focus();
+}
+
+function deleteNewRow() {
+  const newRow = document.getElementById("productRow_new");
+  const dataCells = newRow.querySelectorAll(".editable");
+  dataCells.forEach((dataCell) => {
+    if (
+      dataCell.classList.contains("categoria_id") ||
+      dataCell.classList.contains("proveedor_id")
+    ) {
+      const dataSelect = dataCell.querySelector("select");
+      dataSelect.value = "";
+    } else {
+      dataCell.textContent = "";
+    }
+  });
+  removeErrorMessages(newRow);
 }
 
 function setCaretAtEnd(element) {
@@ -461,6 +407,56 @@ function setCaretAtEnd(element) {
   selection.removeAllRanges();
   selection.addRange(range);
   element.focus();
+}
+
+async function loadCategories() {
+  const response = await fetch(
+    "app/controllers/categoria_controller.php?action=getAll"
+  );
+  const categoriesResponse = await response.json();
+  const categories = categoriesResponse.data;
+  let options = '<option value=""></option>';
+  categories.forEach((category) => {
+    options += `<option value="${category.id}">${category.nombre_categoria}</option>`;
+  });
+  return options;
+}
+
+async function loadProviders() {
+  const response = await fetch(
+    "app/controllers/proveedor_controller.php?action=getAll"
+  );
+  const providersResponse = await response.json();
+  const providers = providersResponse.data;
+  let options = '<option value=""></option>';
+  providers.forEach((provider) => {
+    options += `<option value="${provider.id}">${provider.nombre_proveedor}</option>`;
+  });
+  return options;
+}
+
+function addValidationListeners() {
+  // Selector para los elementos td que deben contener solo números
+  const numericTds = document.querySelectorAll(".codigo_barras, .existencias");
+  numericTds.forEach(td => {
+    td.addEventListener("input", function (event) {
+      // Reemplaza cualquier caracter que no sea un dígito con una cadena vacía
+      this.textContent = this.textContent.replace(/[^0-9]/g, "");
+    });
+  });
+
+  // Selector para los elementos td que deben contener solo letras
+  const letterTds = document.querySelectorAll(".unidad");
+  letterTds.forEach(td => {
+    td.addEventListener("input", function (event) {
+      // Reemplaza cualquier caracter que no sea una letra con una cadena vacía
+      this.textContent = this.textContent.replace(/[^a-zA-Z\s]/g, "");
+    });
+  });
+}
+
+function roundToMultipleOf100(value) {
+  return Math.round(value / 100) * 100;
 }
 
 function formatCurrencyElement(element, fromDatabase) {
@@ -583,6 +579,10 @@ function addInputListeners() {
       formatCurrencyElement(precioMayoreoNuevo, false);
     });
   }
+}
+
+function generateProductsExcel() {
+  window.open("config/generate_excel_productos.php", "_blank");
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

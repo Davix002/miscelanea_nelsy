@@ -121,9 +121,6 @@
     }
     scrollToBottom();
   }
-  
-  // Llama a la función cuando se carga la página
-  document.addEventListener("DOMContentLoaded", loadProveedores);
 
   function fnCreateUpdate(action = "CREATE", id = "") {
     const row = document.querySelector(`#proveedorRow_${id}`);
@@ -318,3 +315,10 @@ function setCaretAtEnd(element) {
   selection.addRange(range);
   element.focus();
 }
+
+function generateProveedoresExcel() {
+  window.open("config/generate_excel_proveedores.php", "_blank");
+}
+
+// Llama a la función cuando se carga la página
+document.addEventListener("DOMContentLoaded", loadProveedores);
