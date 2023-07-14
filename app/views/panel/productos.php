@@ -17,8 +17,6 @@
     <div class="col-4 mb-3 ps-0">
         <input type="search" class="form-control" id="searchProduct" placeholder="Buscar producto" onkeyup="filterProducts()">
     </div>
-    
-
 
     <table class="table table-hover table-sm" id="productTable">
         <thead>
@@ -59,5 +57,18 @@
 
     </table>
 
+    <?php
+    // Detect if we are in a local environment or in production
+    if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '127.0.0.1') {
+        $images_base_path = '../miscelanea_nelsy/public/images';
+    } else {
+        $images_base_path = '../public/images';
+    }
+    ?>
+    <script>
+        var IMAGES_BASE_PATH = <?php echo json_encode($images_base_path); ?>;
+    </script>
+
     <script src="public/js/panel/productos.js"></script>
+
 </div>

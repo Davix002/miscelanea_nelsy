@@ -87,15 +87,11 @@ class Proveedor_controller {
         $error = [];
     
         if ($_POST['nombre_proveedor'] == "") {
-            $error['nombre_proveedor'] = "El campo no puede estar vacío.";
-        }
-    
-        if ($_POST['direccion'] == "") {
-            $error['direccion'] = "El campo no puede estar vacío.";
+            $error['nombre_proveedor'] = "El campo nombre proveedor no puede estar vacío.";
         }
     
         if ($_POST['telefono'] == "") {
-            $error['telefono'] = "El campo no puede estar vacío.";
+            $error['telefono'] = "El campo telefono no puede estar vacío.";
         }
     
         return $error;

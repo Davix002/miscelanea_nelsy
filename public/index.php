@@ -13,28 +13,33 @@
         }
 
         .error-message {
-            width: 100%;
             margin-top: .25rem;
             font-size: .875em;
             color: #dc3545;
         }
 
-        table tr td{
+         table tr td{
             text-align: left;
             vertical-align: middle;
         }
 
-        tr:last-child td {
+        #productRow_new .editable {
             border-color:#333;
             border-width: 2px;
             box-shadow: inset 2px 2px 2px 0 gray;
         }
 
-        .editable-row td{
+        #proveedorRow_new .editable {
             border-color:#333;
             border-width: 2px;
             box-shadow: inset 2px 2px 2px 0 gray;
         }
+
+        .editable-row .editable{
+            border-color:#333;
+            border-width: 2px;
+            box-shadow: inset 2px 2px 2px 0 gray;
+        } 
 
     </style>
 

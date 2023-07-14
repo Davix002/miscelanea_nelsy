@@ -204,7 +204,7 @@ async function loadProducts() {
       let modifiedProviderOptions = providerOptions.replace(`value="${product.proveedor_id}"`, `value="${product.proveedor_id}" selected`);
 
       row.innerHTML = `
-        <td class="bg-white border border-secondary-subtle shadow-none">${product.id}</td>
+        <td class="bg-white shadow-none">${product.id}</td>
         <td class="nombre_producto editable" contenteditable="false">${product.nombre_producto}</td>
         <td class="codigo_barras editable" contenteditable="false">${product.codigo_barras}</td>
           <td class="precio_compra editable moneda" contenteditable="false">${product.precio_compra}</td>
@@ -222,20 +222,20 @@ async function loadProducts() {
               ${modifiedProviderOptions}
             </select>
           </td>
-          <td class="bg-white border border-secondary-subtle shadow-none">
+          <td class="bg-white shadow-none">
             <button type='button' onclick='enableEditing(${product.id})' class='btn btn-primary editBtn'>
-              <img src='../miscelanea_nelsy/public/images/pencil.svg'>
+              <img src='${IMAGES_BASE_PATH}/pencil.svg'>
             </button>
             <button type='button' onclick='fnCreateUpdate("UPDATE", ${product.id})' class='btn btn-success d-none saveBtn'>
-              <img src='../miscelanea_nelsy/public/images/check.svg'>
+              <img src='${IMAGES_BASE_PATH}/check.svg'>
             </button>
           </td>
-          <td class="bg-white border border-secondary-subtle shadow-none">
+          <td class="bg-white shadow-none">
             <button type='button' onclick='fnDelete(${product.id})' class='btn btn-danger deleteBtn'>
-              <img src='../miscelanea_nelsy/public/images/trash.svg'>
+              <img src='${IMAGES_BASE_PATH}/trash.svg'>
             </button>
             <button type='button' onclick='fnCancel(${product.id})' class='btn btn-dark d-none cancelBtn'>
-              <img src='../miscelanea_nelsy/public/images/cancel.svg'>
+              <img src='${IMAGES_BASE_PATH}/cancel.svg'>
             </button>
           </td>
       `;
@@ -246,7 +246,7 @@ async function loadProducts() {
     newRow.id = "productRow_new";
 
     newRow.innerHTML = `
-      <td class="bg-white shadow-none border border-secondary-subtle">+</td>
+      <td class="bg-white shadow-none">+</td>
       <td class="nombre_producto editable" id="nombre_producto_nuevo" contenteditable="true"></td>
         <td class="codigo_barras editable" contenteditable="true"></td>
         <td class="precio_compra editable" id='precio_compra_nuevo' contenteditable="true"></td>
@@ -264,14 +264,14 @@ async function loadProducts() {
               ${providerOptions}
             </select>
           </td>
-          <td class="bg-white shadow-none border border-secondary-subtle">
+          <td class="bg-white shadow-none">
             <button type='button' onclick='fnCreateUpdate("CREATE", "new")' class='btn btn-success saveBtn'>
-              <img src='../miscelanea_nelsy/public/images/check.svg'>
+              <img src='${IMAGES_BASE_PATH}/check.svg'>
             </button>
           </td>
-          <td class="bg-white shadow-none border border-secondary-subtle">
+          <td class="bg-white shadow-none">
             <button type='button' onclick='deleteNewRow()' class='btn btn-dark'>
-              <img src='../miscelanea_nelsy/public/images/cancel.svg'>
+              <img src='${IMAGES_BASE_PATH}/cancel.svg'>
             </button>
           </td>
     `;

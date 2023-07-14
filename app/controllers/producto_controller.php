@@ -112,10 +112,6 @@ class Producto_controller
             $error['unidad'] = "El campo de unidad no puede estar vacía.";
         }
 
-        if ($_POST['existencias'] == "") {
-            $error['existencias'] = "El campo de existencias no puede estar vacío.";
-        }
-
         if ($_POST['proveedor_id'] == "") {
             $error['proveedor_id'] = "El proveedor no puede estar vacío.";
         }
