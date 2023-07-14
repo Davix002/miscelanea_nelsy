@@ -1,5 +1,5 @@
 <div class="row">
-    <button type="button" class="col-2 btn btn-primary me-2 my-3 " onclick="scrollToBottom()">
+    <button type="button" class="col-2 btn btn-primary me-2 my-3" onclick="scrollToBottom()">
         Nuevo producto
     </button>
     <button type="button" class="col-2 btn btn-secondary me-2 my-3" onclick="printProductsToPDF()">

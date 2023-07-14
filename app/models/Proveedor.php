@@ -26,6 +26,13 @@ class Proveedor
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getByNit($nit)
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM proveedores WHERE nit = ?");
+        $statement->execute([$nit]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function create($proveedor_data)
     {
         $statement = $this->pdo->prepare("INSERT INTO proveedores (nombre_proveedor, nit, direccion, telefono, correo_electronico) VALUES (?, ?, ?, ?, ?)");

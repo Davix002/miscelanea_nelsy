@@ -322,3 +322,28 @@ function generateProveedoresExcel() {
 
 // Llama a la función cuando se carga la página
 document.addEventListener("DOMContentLoaded", loadProveedores);
+
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  var formData = new FormData();
+  formData.append("excelFile", document.getElementById('excelFile').files[0]);
+  
+  fetch("app/controllers/proveedor_controller.php?action=upload", {
+      method: "POST",
+      body: formData
+  }).then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  }).then(async data => {
+      await loadProveedores();
+  }).catch(err => {
+      console.error(err);
+      alert("Error procesando el archivo.");
+  }).finally(() => {
+      // Reset the form after file has been submitted
+      document.getElementById('uploadForm').reset();
+  });
+});

@@ -1,6 +1,13 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 require_once __DIR__ . '/../models/Categoria.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Categoria_controller
 {
@@ -105,6 +112,49 @@ class Categoria_controller
         echo json_encode($response);
     }
 
+    public function upload()
+    {
+        if (isset($_FILES['excelFile'])) {
+            $file = $_FILES['excelFile']['tmp_name'];
+
+            try {
+                $spreadsheet = IOFactory::load($file);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $rows = $worksheet->toArray();
+
+                foreach ($rows as $index => $row) {
+                    if ($index == 0) continue; // Ignorar encabezados
+
+                    $data = [
+                        'nombre_categoria' => $row[0],
+                        'descripcion' => $row[1],
+                    ];
+
+                    // Verificar si la categoria existe
+                    $existingCategoria = $this->model->getByName($data['nombre_categoria']);
+
+                    // Si la categoria existe, actualizarlo. De lo contrario, crear uno nuevo.
+                    if ($existingCategoria) {
+                        $data['id'] = $existingCategoria['id'];  // Asigna el id de la categoria existente a $data
+                        $this->model->update($data);
+                    } else {
+                        $this->model->create($data);
+                    }
+                }
+
+                // Enviar respuesta exitosa
+                echo json_encode(['success' => true, 'message' => 'Categorias importados/actualizados exitosamente']);
+            } catch (Exception $e) {
+                // Manejar excepciones
+                http_response_code(500);
+                echo json_encode(['error' => 'Error al procesar el archivo']);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(['error' => 'No se recibió ningún archivo']);
+        }
+    }
+
     public function doAction()
     {
         $action = $_REQUEST['action'];
@@ -124,6 +174,9 @@ class Categoria_controller
                 break;
             case 'getAll':
                 $this->getAll();
+            break;
+            case 'upload':
+                $this->upload();
             break;
             default:
                 http_response_code(409);

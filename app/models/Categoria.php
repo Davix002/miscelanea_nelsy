@@ -26,6 +26,14 @@ class Categoria
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getByName($nombreCategoria)
+    {
+        $nombreCategoria = trim(mb_strtolower($nombreCategoria, 'UTF-8'));
+        $statement = $this->pdo->prepare("SELECT * FROM categorias WHERE LOWER(TRIM(nombre_categoria)) = LOWER(TRIM(?))");
+        $statement->execute([$nombreCategoria]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function create($categoria_data)
     {
         $statement = $this->pdo->prepare("INSERT INTO categorias (nombre_categoria, descripcion) VALUES (?, ?)");

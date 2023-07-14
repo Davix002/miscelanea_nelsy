@@ -57,8 +57,8 @@ class Producto
 
     public function getCategoriaIdPorNombre($nombreCategoria)
     {
-        $nombreCategoria = mb_strtolower($nombreCategoria, 'UTF-8');
-        $statement = $this->pdo->prepare("SELECT id FROM categorias WHERE LOWER(nombre_categoria) = LOWER(?)");
+        $nombreCategoria = trim(mb_strtolower($nombreCategoria, 'UTF-8'));
+        $statement = $this->pdo->prepare("SELECT id FROM categorias WHERE LOWER(TRIM(nombre_categoria)) = LOWER(TRIM(?))");
         $statement->execute([$nombreCategoria]);
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['id'] : null;
@@ -66,14 +66,12 @@ class Producto
 
     public function getProveedorIdPorNombre($nombreProveedor)
     {
-        $nombreProveedor = mb_strtolower($nombreProveedor, 'UTF-8');
-        $statement = $this->pdo->prepare("SELECT id FROM proveedores WHERE LOWER(nombre_proveedor) = LOWER(?)");
+        $nombreProveedor = trim(mb_strtolower($nombreProveedor, 'UTF-8'));
+        $statement = $this->pdo->prepare("SELECT id FROM proveedores WHERE LOWER(TRIM(nombre_proveedor)) = LOWER(TRIM(?))");
         $statement->execute([$nombreProveedor]);
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['id'] : null;
     }
-
-
 
     public function create($product_data)
     {
