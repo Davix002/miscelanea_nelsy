@@ -23,18 +23,12 @@
             vertical-align: middle;
         }
 
-        #productRow_new .editable {
+        #productRow_new .editable, #categoriaRow_new .editable, #proveedorRow_new .editable{
             border-color:#333;
             border-width: 2px;
             box-shadow: inset 2px 2px 2px 0 gray;
         }
-
-        #proveedorRow_new .editable {
-            border-color:#333;
-            border-width: 2px;
-            box-shadow: inset 2px 2px 2px 0 gray;
-        }
-
+        
         .editable-row .editable{
             border-color:#333;
             border-width: 2px;

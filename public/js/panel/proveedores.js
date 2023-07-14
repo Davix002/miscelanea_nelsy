@@ -205,11 +205,8 @@
     );
   }
 
-  function getElementValueFromRow(row, className, isSelect = false) {
+  function getElementValueFromRow(row, className) {
     const elementData = row.querySelector(`.${className}`);
-    if (isSelect) {
-      return elementData.querySelector("select").value;
-    }
     return elementData.textContent;
   }
   
@@ -312,7 +309,6 @@
     });
   }
 
-  
 function setCaretAtEnd(element) {
   const range = document.createRange();
   const selection = window.getSelection();
