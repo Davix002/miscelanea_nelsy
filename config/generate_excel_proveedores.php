@@ -30,6 +30,12 @@ foreach ($proveedores as $proveedor) {
     $row++;
 }
 
+foreach (range('A', $spreadsheet->getActiveSheet()->getHighestDataColumn()) as $col) {
+    $spreadsheet->getActiveSheet()
+                ->getColumnDimension($col)
+                ->setAutoSize(true);
+}
+
 // Guarda el archivo de Excel en el servidor y envíalo al navegador para su descarga
 $writer = new Xlsx($spreadsheet);
 $fileName = 'proveedores.xlsx';
