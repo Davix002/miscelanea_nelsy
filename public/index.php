@@ -42,7 +42,7 @@
 
 <body>
     <?php
-
+    
     session_start();
     if (isset($_SESSION["user"])) {
         require_once __DIR__ . "/../app/views/panel/index.php";
